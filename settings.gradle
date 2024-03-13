@@ -1,0 +1,4 @@
+rootProject.name = 'AnoHub'
+
+include 'discovery-server'
+include 'users-management-system'
