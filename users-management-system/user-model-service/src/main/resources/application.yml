@@ -1,0 +1,14 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/your_database
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  application.name: user-model-service
