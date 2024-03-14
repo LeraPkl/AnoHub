@@ -1,6 +1,6 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/your_database
+    url: r2dbc:postgresql://localhost:5432/users
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
@@ -12,3 +12,6 @@ spring:
     show-sql: true
 
   application.name: user-model-service
+
+server:
+  port: 8083

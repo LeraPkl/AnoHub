@@ -1,0 +1,16 @@
+spring:
+  application.name: gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user_model_service
+          uri: lb://user-model-service
+          predicates:
+            - Path=/user-model-app/api/**
+        - id: feed_service
+          uri: lb://feed-service
+          predicates:
+            - Path=/feed-app/api/**
+
+server:
+  port: 8765
