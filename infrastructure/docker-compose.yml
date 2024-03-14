@@ -9,6 +9,8 @@ services:
       POSTGRES_DB: users
     ports:
       - "5432:5432"
+    volumes:
+      - users_data:/var/lib/postgresql/data
 
   feed_db:
     image: mongo
@@ -19,3 +21,9 @@ services:
       MONGO_INITDB_DATABASE: feed
     ports:
       - "27017:27017"
+    volumes:
+      - feed_data:/data/db
+
+volumes:
+  feed_data:
+  users_data:
