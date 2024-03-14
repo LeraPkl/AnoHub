@@ -1,7 +1,8 @@
 spring:
     data:
         mongodb:
-            uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@localhost/test
+            database: feed
+            uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@localhost:27017/feed
     application:
         name: feed-service
 
