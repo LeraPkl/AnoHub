@@ -10,6 +10,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/discovery-server" />
+            <option value="$PROJECT_DIR$/interaction-system" />
+            <option value="$PROJECT_DIR$/interaction-system/feed-service" />
             <option value="$PROJECT_DIR$/users-management-system" />
           </set>
         </option>
@@ -19,6 +21,14 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/discovery-server" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/interaction-system/feed-service" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/interaction-system/feed-service" />
           </set>
         </option>
       </GradleProjectSettings>
