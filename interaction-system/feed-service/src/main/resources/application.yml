@@ -1,1 +1,10 @@
-spring.application.name=feed-service
+spring:
+    data:
+        mongodb:
+            uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@localhost/test
+    application:
+        name: feed-service
+
+server:
+    port: 8081
+
