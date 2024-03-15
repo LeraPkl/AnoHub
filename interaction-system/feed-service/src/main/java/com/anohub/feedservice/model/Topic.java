@@ -1,17 +1,19 @@
 package com.anohub.feedservice.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Setter
+@Getter
 @Document(collection = "topics")
 public class Topic {
 
     @Id
     private String id;
 
-    @DBRef
-    private Category category;
+    private String categoryId;
 
     private String name;
 

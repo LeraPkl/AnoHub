@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("user-model-app/api/v1/users")
+@RequestMapping("/user-model-app/api/v1/users")
 public class UserController {
 
     private final UserService userService;

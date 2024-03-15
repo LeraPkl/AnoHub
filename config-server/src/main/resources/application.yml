@@ -1,0 +1,17 @@
+spring:
+  application.name: config-server
+  #  cloud.config.server.native.searchLocations: file:classpath:/config
+  cloud.config.server.prefix: /config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: git@github.com:LeraPkl/AnoHub.git
+          #          search-paths: '{application}'
+          clone-on-start: true
+          delete-untracked-branches: true
+          ignore-local-ssh-settings: true
+          refresh-rate: 300
+          private-key: ${GIT_PRIVATE_KEY}
+
+server.port: 8888
