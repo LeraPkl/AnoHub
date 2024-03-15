@@ -1,6 +1,5 @@
 package com.anohub.privatechatservice.model;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
@@ -22,11 +21,11 @@ public class Chat {
 
     private String receiverNickname;
 
-    private LocalDateTime expiresAt = LocalDateTime.now().plusHours(24);
+    private LocalDateTime expiresAt;
 
-    @PostConstruct
-    public void init() {
-        this.receiverNickname = "user" + receiverId;
+    public Chat() {
+        receiverNickname = "user" + receiverId;
+        expiresAt = LocalDateTime.now().plusHours(24);
     }
 }
 
