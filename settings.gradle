@@ -1,11 +1,10 @@
 rootProject.name = 'AnoHub'
 
+include 'common'
 include 'discovery-server'
 include 'users-management-system'
+include 'users-management-system:user-model-service'
 include 'interaction-system'
 include 'interaction-system:feed-service'
-include 'common'
-include 'users-management-system:user-model-service'
-include 'users-management-system'
 include 'gateway'
 include 'config-server'

@@ -1,0 +1,9 @@
+spring:
+  r2dbc:
+    username: un
+    password: pw
+
+  flyway:
+    user: un
+    password: pw
+
