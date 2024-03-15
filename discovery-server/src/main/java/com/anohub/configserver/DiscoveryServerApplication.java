@@ -1,4 +1,4 @@
-package com.anohub.discoveryserver;
+package com.anohub.configserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

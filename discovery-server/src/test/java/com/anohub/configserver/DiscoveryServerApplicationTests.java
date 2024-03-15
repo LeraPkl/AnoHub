@@ -1,4 +1,4 @@
-package com.anohub.discoveryserver;
+package com.anohub.configserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

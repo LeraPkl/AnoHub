@@ -1,18 +1,16 @@
-package com.anohub.feedservice;
+package com.anohub.configserver;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles("test")
-class FeedServiceApplicationTests {
+class ConfigServerApplicationTests {
 
     @Test
     void contextLoads() {
         Assertions.assertDoesNotThrow(() -> {
-            FeedServiceApplication.main(new String[]{});
+            ConfigServerApplication.main(new String[]{});
         });
     }
 
