@@ -2,3 +2,5 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:root@localhost:27017/feed?authSource=admin
+
+gateway.url: http://localhost:8765
