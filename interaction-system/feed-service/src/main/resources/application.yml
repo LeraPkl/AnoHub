@@ -7,7 +7,7 @@ spring:
         name: feed-service
 
     config:
-        import: configserver:http://localhost:8888/config-server
+      import: optional:configserver:http://localhost:8888/config-server
 
 server:
     port: 8081
