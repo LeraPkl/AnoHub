@@ -2,7 +2,7 @@ spring:
     data:
         mongodb:
             database: feed
-            uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${FEED_DB_HOST}:27017/feed?authSource=admin
+            uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@localhost:27017/feed?authSource=admin
     application:
         name: feed-service
 

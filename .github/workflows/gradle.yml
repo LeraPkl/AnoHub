@@ -34,7 +34,12 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker images
-        run: ./gradlew bootBuildImage --imageName=${{ secrets.DOCKER_USERNAME }}/ano_hub:tag
+        run: ./gradlew bootBuildImage
 
       - name: Push Docker images
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/ano_hub:tag
+        run: |
+          for dir in $(find . -type d -name "src" -exec dirname {} \;); do
+            service_name=$(basename "$dir")
+            docker tag $service_name:0.0.1-SNAPSHOT ${{ secrets.DOCKER_USERNAME }}/$service_name:latest
+            docker push ${{ secrets.DOCKER_USERNAME }}/$service_name:latest
+          done

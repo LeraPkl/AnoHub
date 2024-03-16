@@ -31,12 +31,6 @@ subprojects {
 
     bootBuildImage {
         enabled = bootJar.enabled
-        imageName = "${project.name}"
-        docker {
-            publishRegistry {
-                username = System.getenv('DOCKER_USERNAME')
-                password = System.getenv('DOCKER_PASSWORD')
-            }
-        }
+        imageName = "${System.getenv('DOCKER_USERNAME')}/${project.name}"
     }
 }

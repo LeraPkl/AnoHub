@@ -39,17 +39,67 @@ services:
     volumes:
       - private_chats:/data/db
 
-  web:
-    container_name: web
+  config-server:
+    container_name: config-server
     env_file:
       - .env
-    image: kamomillte/ano_hub:tag
+    image: kamomillte/ano_hub:config-server
     ports:
-      - "8080:8080"
+      - "8888:8888"
+
+  discovery-server:
+    container_name: discovery-server
+    env_file:
+      - .env
+    image: kamomillte/ano_hub:discovery-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  gateway:
+    container_name: gateway
+    env_file:
+      - .env
+    image: kamomillte/ano_hub:gateway
+    ports:
+      - "8765:8765"
+
+  feed-service:
+    container_name: feed-service
+    env_file:
+      - .env
+    image: kamomillte/ano_hub:feed-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - feed_db
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  private-chat-service:
+    container_name: private-chat-service
+    env_file:
+      - .env
+    image: kamomillte/ano_hub:private-chat-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - private_chats_db
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  user-model-service:
+    container_name: user-model-service
+    env_file:
+      - .env
+    image: kamomillte/ano_hub:user-model-service
+    ports:
+      - "8083:8083"
     depends_on:
       - users_db
-      - feed_db
-      - private_chats_db
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
 volumes:
   feed_data:

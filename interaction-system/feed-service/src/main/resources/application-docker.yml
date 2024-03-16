@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      database: feed
+      uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${FEED_DB_HOST}:27017/feed?authSource=admin
+  application:
+    name: feed-service
+
+  config:
+    import: optional:configserver:http://config-server:8888/config-server
+

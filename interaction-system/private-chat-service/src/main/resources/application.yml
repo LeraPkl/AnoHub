@@ -2,7 +2,7 @@ spring:
   data:
     mongodb:
       database: private_chats
-      uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${PRIVATE_CHATS_DB_HOST}:27018/private_chats?authSource=admin
+      uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@localhost:27018/private_chats?authSource=admin
   application:
     name: private-chats-service
 
