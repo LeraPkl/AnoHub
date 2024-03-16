@@ -43,7 +43,7 @@ services:
     container_name: config-server
     env_file:
       - .env
-    image: kamomillte/ano_hub:config-server
+    image: kamomillte/config-server
     ports:
       - "8888:8888"
 
@@ -51,7 +51,7 @@ services:
     container_name: discovery-server
     env_file:
       - .env
-    image: kamomillte/ano_hub:discovery-server
+    image: kamomillte/discovery-server
     ports:
       - "8761:8761"
     environment:
@@ -61,7 +61,7 @@ services:
     container_name: gateway
     env_file:
       - .env
-    image: kamomillte/ano_hub:gateway
+    image: kamomillte/gateway
     ports:
       - "8765:8765"
 
@@ -69,7 +69,7 @@ services:
     container_name: feed-service
     env_file:
       - .env
-    image: kamomillte/ano_hub:feed-service
+    image: kamomillte/feed-service
     ports:
       - "8081:8081"
     depends_on:
@@ -81,7 +81,7 @@ services:
     container_name: private-chat-service
     env_file:
       - .env
-    image: kamomillte/ano_hub:private-chat-service
+    image: kamomillte/private-chat-service
     ports:
       - "8081:8081"
     depends_on:
@@ -93,7 +93,7 @@ services:
     container_name: user-model-service
     env_file:
       - .env
-    image: kamomillte/ano_hub:user-model-service
+    image: kamomillte/user-model-service
     ports:
       - "8083:8083"
     depends_on:
