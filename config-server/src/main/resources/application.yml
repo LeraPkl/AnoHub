@@ -11,5 +11,7 @@ spring:
           ignore-local-ssh-settings: true
           refresh-rate: 300
           private-key: ${GIT_PRIVATE_KEY}
+  config:
+    import: env.yml
 
 server.port: 8888

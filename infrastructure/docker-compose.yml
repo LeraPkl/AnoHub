@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   users_db:
+    container_name: users_db
     image: postgres:16.1
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -13,6 +14,7 @@ services:
       - users_data:/var/lib/postgresql/data
 
   feed_db:
+    container_name: feed_db
     image: mongo
     restart: always
     environment:
@@ -24,6 +26,32 @@ services:
     volumes:
       - feed_data:/data/db
 
+  private_chats_db:
+    container_name: private_chats_db
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: private_chats
+    ports:
+      - "27018:27017"
+    volumes:
+      - private_chats:/data/db
+
+  web:
+    container_name: web
+    env_file:
+      - .env
+    image: kamomillte/ano_hub:tag
+    ports:
+      - "8080:8080"
+    depends_on:
+      - users_db
+      - feed_db
+      - private_chats_db
+
 volumes:
   feed_data:
   users_data:
+  private_chats:

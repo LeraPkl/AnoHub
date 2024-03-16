@@ -1,6 +1,6 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/users
+    url: r2dbc:postgresql://${USERS_DB_HOST}:5432/users
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
@@ -19,7 +19,7 @@ spring:
     locations: classpath:db/migration
     user: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/users
+    url: jdbc:postgresql://${USERS_DB_HOST}:5432/users
     driver-class-name: org.postgresql.Driver
 
 server:
