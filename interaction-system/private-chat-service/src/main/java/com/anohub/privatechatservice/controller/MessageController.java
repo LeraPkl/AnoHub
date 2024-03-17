@@ -3,6 +3,7 @@ package com.anohub.privatechatservice.controller;
 import com.anohub.privatechatservice.model.Message;
 import com.anohub.privatechatservice.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,7 +21,7 @@ public class MessageController {
     }
 
     @GetMapping("/chat/{chatId}")
-    public Flux<Message> getAllMessagesByChatId(@PathVariable String chatId) {
+    public Flux<Message> getAllMessagesByChatId(@PathVariable ObjectId chatId) {
         return messageService.getAllMessagesByChatId(chatId);
     }
 

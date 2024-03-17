@@ -3,6 +3,7 @@ package com.anohub.privatechatservice.service;
 import com.anohub.privatechatservice.model.Message;
 import com.anohub.privatechatservice.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,8 +18,8 @@ public class MessageService {
         return messageRepository.save(message);
     }
 
-    public Flux<Message> getAllMessagesByChatId(String chatId) {
-        return messageRepository.findByChatId(chatId);
+    public Flux<Message> getAllMessagesByChatId(ObjectId chatId) {
+        return messageRepository.findAllByChatId(chatId);
     }
 
     public Mono<Message> updateMessage(String id, String content) {

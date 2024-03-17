@@ -21,7 +21,7 @@ public class ChatController {
 
     @DeleteMapping("/{id}")
     public Mono<Void> deleteChat(@PathVariable String id) {
-        return chatService.deleteChat(id);
+        return chatService.deleteById(id);
     }
 
     @GetMapping("/sender/{senderId}")
