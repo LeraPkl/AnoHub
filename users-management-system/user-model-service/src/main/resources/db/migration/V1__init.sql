@@ -5,6 +5,15 @@ CREATE TABLE IF NOT EXISTS users
     password VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS friends
+(
+    user_id   BIGINT NOT NULL,
+    friend_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, friend_id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (friend_id) REFERENCES users (id)
+);
+
 INSERT INTO users (username, password)
 VALUES ('johnsmith', '$2a$10$zsA8G7i7e9FZfY8J6KRC7uZLzZI0wRkZZgWDMj5EsF7yZKNZf3r6G'); -- Plain password: password1
 INSERT INTO users (username, password)
@@ -25,3 +34,19 @@ INSERT INTO users (username, password)
 VALUES ('brianjones', '$2a$10$5UvMEUaFf0DpAiLgPZ1T8eJ2J6ESVbmZ5qMe1p7u3y5J6IiI3kV1e'); -- Plain password: password9
 INSERT INTO users (username, password)
 VALUES ('kateanderson', '$2a$10$2T8DQr3W0RwMw3L0M4fZnOJYnT4Z9W8W4o2fZK8JVKY0NlVj6qH8G'); -- Plain password: password10
+
+
+INSERT INTO friends (user_id, friend_id)
+VALUES (9, 2);
+INSERT INTO friends (user_id, friend_id)
+VALUES (8, 2);
+INSERT INTO friends (user_id, friend_id)
+VALUES (7, 2);
+INSERT INTO friends (user_id, friend_id)
+VALUES (6, 3);
+INSERT INTO friends (user_id, friend_id)
+VALUES (2, 3);
+INSERT INTO friends (user_id, friend_id)
+VALUES (1, 3);
+INSERT INTO friends (user_id, friend_id)
+VALUES (9, 3);

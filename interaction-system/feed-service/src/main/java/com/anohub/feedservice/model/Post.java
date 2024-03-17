@@ -23,10 +23,16 @@ public class Post {
 
     private String content;
 
+    private PrivacyLevel privacyLevel = PrivacyLevel.PUBLIC;
+
     @Transient
     private Topic topic;
 
     @Transient
     private UserDto user;
 
+    enum PrivacyLevel {
+        PUBLIC,
+        FOR_FRIENDS
+    }
 }

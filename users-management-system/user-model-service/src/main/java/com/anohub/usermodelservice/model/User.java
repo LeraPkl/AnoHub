@@ -7,6 +7,9 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Setter
 @Getter
 @Table("users")
@@ -20,6 +23,8 @@ public class User {
 
     @NotBlank
     private String password;
+
+    private List<User> friends = new ArrayList<>();
 
 }
 
