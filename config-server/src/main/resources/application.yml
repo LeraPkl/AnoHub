@@ -14,4 +14,9 @@ spring:
   config:
     import: env.yml
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-server:8761/eureka/
+
 server.port: 8888

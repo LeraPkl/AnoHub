@@ -16,5 +16,8 @@ spring:
           predicates:
             - Path=/feed-app/api/**
 
+  config:
+    import: optional:configserver:http://config-server:8888/config-server
+
 server:
   port: 8765

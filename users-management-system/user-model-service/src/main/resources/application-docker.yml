@@ -22,5 +22,8 @@ spring:
     url: jdbc:postgresql://${USERS_DB_HOST}:5432/users
     driver-class-name: org.postgresql.Driver
 
+  config:
+    import: optional:configserver:http://config-server:8888/config-server
+
 server:
   port: 8083
