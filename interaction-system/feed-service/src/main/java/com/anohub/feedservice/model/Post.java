@@ -36,3 +36,5 @@ public class Post {
         FOR_FRIENDS
     }
 }
+
+

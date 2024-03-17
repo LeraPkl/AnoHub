@@ -21,7 +21,10 @@ public class FriendsService {
                 .filter(bothEmpty -> bothEmpty.getT1() && bothEmpty.getT2())
                 .switchIfEmpty(Mono.error(new FriendsAlreadyExistsException(senderId, receiverId)))
                 .then(Mono.defer(() -> {
-                    Friends friendRequest = new Friends(senderId, receiverId);
+                    Friends friendRequest = Friends.builder()
+                            .user1Id(senderId)
+                            .user2Id(receiverId)
+                            .build();
                     return friendsRepository.save(friendRequest);
                 }));
     }
