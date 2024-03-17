@@ -12,7 +12,7 @@ spring:
           refresh-rate: 300
           private-key: ${GIT_PRIVATE_KEY}
   config:
-    import: file:secrets/env.yml
+    import: file:/secrets/env.yml
 
 eureka:
   client:
