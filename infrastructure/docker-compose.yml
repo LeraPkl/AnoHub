@@ -46,6 +46,8 @@ services:
     image: kamomillte/config-server
     ports:
       - "8888:8888"
+    volumes:
+      - ../config-server/src/main/resources/env.yml:/secrets/env.yml
     environment:
       - SPRING_PROFILES_ACTIVE=docker
 
