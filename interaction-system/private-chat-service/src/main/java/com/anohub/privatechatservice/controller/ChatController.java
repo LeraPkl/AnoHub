@@ -24,13 +24,15 @@ public class ChatController {
         return chatService.deleteById(id);
     }
 
-    @GetMapping("/sender/{senderId}")
-    public Flux<Chat> findBySenderId(@PathVariable String senderId) {
-        return chatService.findBySenderId(senderId);
+    @GetMapping("/user1/{user1}")
+    public Flux<Chat> findAllChatsByUserId(@PathVariable String user1) {
+        return chatService.findByUser1(user1);
     }
 
-    @GetMapping("/receiver/{receiverId}")
-    public Flux<Chat> findByReceiverId(@PathVariable String receiverId) {
-        return chatService.findByReceiverId(receiverId);
+    @GetMapping("/user1/{user1}/{user2}")
+    public Mono<Chat> findChatsByUsersId(@PathVariable String user1,
+                                         @PathVariable String user2) {
+        return chatService.findChatByUsersId(user1, user2);
     }
+
 }

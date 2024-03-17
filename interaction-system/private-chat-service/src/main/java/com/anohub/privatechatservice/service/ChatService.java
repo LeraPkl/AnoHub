@@ -33,11 +33,11 @@ public class ChatService {
                 .flatMap(chat -> deleteById(chat.getId()));
     }
 
-    public Flux<Chat> findBySenderId(String senderId) {
-        return chatRepository.findBySenderId(senderId);
+    public Flux<Chat> findByUser1(String user1) {
+        return chatRepository.findByUser1(user1);
     }
 
-    public Flux<Chat> findByReceiverId(String receiverId) {
-        return chatRepository.findByReceiverId(receiverId);
+    public Mono<Chat> findChatByUsersId(String user1, String user2) {
+        return chatRepository.findByUser1AndUser2(user1, user2);
     }
 }
