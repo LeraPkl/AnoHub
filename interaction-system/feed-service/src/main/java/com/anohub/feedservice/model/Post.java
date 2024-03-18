@@ -2,9 +2,12 @@ package com.anohub.feedservice.model;
 
 import com.anohub.feedservice.model.dto.UserDto;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,6 +27,9 @@ public class Post {
     private String content;
 
     private PrivacyLevel privacyLevel = PrivacyLevel.PUBLIC;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     @Transient
     private Topic topic;

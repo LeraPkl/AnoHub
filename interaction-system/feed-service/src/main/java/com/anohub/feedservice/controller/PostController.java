@@ -3,6 +3,10 @@ package com.anohub.feedservice.controller;
 import com.anohub.feedservice.model.Post;
 import com.anohub.feedservice.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -31,6 +35,18 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     public Flux<Post> getAllPosts() {
         return postService.getAllPosts();
+    }
+
+    @GetMapping("/page")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<Page<Post>> getAllPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sort,
+            @RequestParam(defaultValue = "ASC") Sort.Direction direction) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort));
+        return postService.findAll(pageable);
     }
 
     @PutMapping("/{id}")

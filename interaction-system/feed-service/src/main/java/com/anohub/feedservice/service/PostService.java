@@ -3,8 +3,12 @@ package com.anohub.feedservice.service;
 import com.anohub.feedservice.client.UserClient;
 import com.anohub.feedservice.model.Post;
 import com.anohub.feedservice.repository.PostRepository;
+import com.anohub.feedservice.repository.PostSortingRepository;
 import com.anohub.feedservice.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,6 +17,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class PostService {
 
+    private final PostSortingRepository postSortingRepository;
     private final PostRepository postRepository;
     private final TopicRepository topicRepository;
     private final UserClient userClient;
@@ -64,5 +69,10 @@ public class PostService {
         return postRepository.deleteById(id);
     }
 
+    public Mono<Page<Post>> findAll(Pageable pageable) {
+        return postSortingRepository.findAllBy(pageable)
+                .collectList()
+                .map(list -> new PageImpl<>(list, pageable, list.size()));
+    }
 }
 
