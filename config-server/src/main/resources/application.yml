@@ -11,8 +11,16 @@ spring:
           ignore-local-ssh-settings: true
           refresh-rate: 300
           private-key: ${GIT_PRIVATE_KEY}
+    vault:
+      token: 00000000-0000-0000-0000-000000000000
+      scheme: http
+      authentication: TOKEN
+      host: 127.0.0.1
+      port: 8200
+      kv.enabled: true
+      application-name: config-server
   config:
-    import: env.yml
+    import: classpath:/env.yml
 
 eureka:
   client:

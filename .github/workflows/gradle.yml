@@ -3,8 +3,6 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -37,6 +35,8 @@ jobs:
         run: ./gradlew bootBuildImage
 
       - name: Push Docker images
+        env:
+          GIT_PRIVATE_KEY: ${{ secrets.GIT_PRIVATE_KEY }}
         run: |
           for dir in $(find . -type d -name "src" -exec dirname {} \;); do
             service_name=$(basename "$dir")
