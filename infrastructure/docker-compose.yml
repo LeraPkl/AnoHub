@@ -44,10 +44,30 @@ services:
     env_file:
       - .env
     image: kamomillte/config-server
+    depends_on:
+      - discovery-server
     ports:
       - "8888:8888"
+    volumes:
+      - ../config-server/src/main/resources/env.yml:/config/env.yml
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_CONFIG_LOCATION=/config/env.yml
+
+  config-serverr:
+    container_name: config-serverr
+    env_file:
+      - .env
+    image: config-server:0.0.1-SNAPSHOT
+    depends_on:
+      - discovery-server
+    ports:
+      - "8888:8888"
+    volumes:
+      - ../config-server/src/main/resources/env.yml:/config/env.yml
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker,git
+      - SPRING_CONFIG_LOCATION=/config/env.yml
 
   discovery-server:
     container_name: discovery-server
