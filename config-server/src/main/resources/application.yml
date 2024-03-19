@@ -6,14 +6,8 @@ spring:
       server:
         git:
           uri: git@github.com:LeraPkl/AnoHub.git
-          clone-on-start: true
-          delete-untracked-branches: true
-          ignore-local-ssh-settings: true
-          refresh-rate: 300
-          private-key: ${GIT_PRIVATE_KEY}
-
-  config:
-    import: optional:classpath:/env.yml
+          username: LeraPkl
+          password: { GITHUB_PAT }
 
 eureka:
   client:

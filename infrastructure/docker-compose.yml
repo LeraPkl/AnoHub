@@ -48,11 +48,8 @@ services:
       - discovery-server
     ports:
       - "8888:8888"
-    volumes:
-      - ../config-server/src/main/resources/env.yml:/config/env.yml
     environment:
       - SPRING_PROFILES_ACTIVE=docker
-      - SPRING_CONFIG_LOCATION=/config/env.yml
 
   discovery-server:
     container_name: discovery-server
@@ -123,3 +120,7 @@ volumes:
   feed_data:
   users_data:
   private_chats:
+
+secrets:
+  GIT_PRIVATE_KEY:
+    file: ../config-server/src/main/resources/env.yml
