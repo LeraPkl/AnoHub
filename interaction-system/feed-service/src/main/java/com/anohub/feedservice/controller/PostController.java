@@ -46,7 +46,17 @@ public class PostController {
             @RequestParam(defaultValue = "ASC") Sort.Direction direction) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sort));
-        return postService.findAll(pageable);
+        return postService.findPostsPage(pageable);
+    }
+
+    @GetMapping("/page/popularity")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<Page<Post>> findAllPageByPopularity(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        return postService.findAllPageByPopularity(pageable);
     }
 
     @PutMapping("/{id}")
@@ -61,3 +71,6 @@ public class PostController {
         return postService.deletePost(id);
     }
 }
+
+
+

@@ -1,9 +1,6 @@
 package com.anohub.feedservice.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 @Document(collection = "post_likes")
 public class PostLike {
 
@@ -22,7 +20,7 @@ public class PostLike {
     private String postId;
 
     @Indexed
-    private String userId;
+    private Long userId;
 
     private Boolean isLike;
 }

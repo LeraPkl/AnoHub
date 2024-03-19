@@ -26,10 +26,14 @@ public class Post {
 
     private String content;
 
+    @Builder.Default
     private PrivacyLevel privacyLevel = PrivacyLevel.PUBLIC;
 
     @CreatedDate
     private LocalDateTime createdAt;
+
+    @Transient
+    double popularity;
 
     @Transient
     private Topic topic;
