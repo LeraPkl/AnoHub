@@ -1,0 +1,34 @@
+spring:
+  application.name: authentication-service
+  #  datasource:
+  #    url: jdbc:postgresql://localhost:5432/keycloak
+  #    username: ${POSTGRES_USER}
+  #    password: ${POSTGRES_PASSWORD}
+  security.oauth2:
+    resourceserver:
+      jwt:
+        jwk-set-uri: http://localhost:9080/realms/ano-hub/protocol/openid-connect/certs
+    client:
+      provider:
+        keycloak:
+          issuer-uri: http://localhost:9080/realms/ano-hub
+      registration:
+        keycloak-client:
+          provider: keycloak
+          client-id: keycloak-client
+          client-secret: ${CLIENT_SECRET}
+          authorization-grant-type: authorization_code
+          scope: openid
+
+keycloak:
+  server-url: http://localhost:9080
+  realm: ano-hub
+jwt:
+  auth:
+    converter:
+      resource-id: keycloak-client
+      principle-attribute: preferred_username
+
+server:
+  port: 8085
+

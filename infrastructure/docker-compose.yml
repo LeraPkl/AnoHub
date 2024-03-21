@@ -12,6 +12,8 @@ services:
       - "5432:5432"
     volumes:
       - users_data:/var/lib/postgresql/data
+    networks:
+      - backend
 
   feed_db:
     container_name: feed_db
@@ -25,6 +27,8 @@ services:
       - "27017:27017"
     volumes:
       - feed_data:/data/db
+    networks:
+      - backend
 
   private_chats_db:
     container_name: private_chats_db
@@ -38,89 +42,48 @@ services:
       - "27018:27017"
     volumes:
       - private_chats:/data/db
+    networks:
+      - backend
 
-  config-server:
-    container_name: config-server
-    env_file:
-      - .env
-    image: kamomillte/config-server
+  keycloak-db:
+    image: postgres:16.1
+    environment:
+      POSTGRES_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    networks:
+      - backend
+
+  keycloak:
+    image: bitnami/keycloak:22.0.5
+    environment:
+      KEYCLOAK_ADMIN_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+      KEYCLOAK_DATABASE_VENDOR: postgresql
+      KEYCLOAK_DATABASE_HOST: keycloak-db
+      KEYCLOAK_DATABASE_NAME: keycloak
+      KEYCLOAK_DATABASE_SCHEMA: public
+      KEYCLOAK_DATABASE_USER: ${POSTGRES_USER}
+      KEYCLOAK_DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "9080:8080"
     depends_on:
-      - discovery-server
-    ports:
-      - "8888:8888"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      - keycloak-db
+    volumes:
+      - ./keycloak_data:/data/keycloak
+    networks:
+      - backend
 
-  discovery-server:
-    container_name: discovery-server
-    env_file:
-      - .env
-    image: kamomillte/discovery-server
-    ports:
-      - "8761:8761"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-
-  gateway:
-    container_name: gateway
-    env_file:
-      - .env
-    image: kamomillte/gateway
-    depends_on:
-      - discovery-server
-    ports:
-      - "8765:8765"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-
-  feed-service:
-    container_name: feed-service
-    env_file:
-      - .env
-    image: kamomillte/feed-service
-    ports:
-      - "8081:8081"
-    depends_on:
-      - feed_db
-      - user-model-service
-      - gateway
-      - config-server
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-
-  private-chat-service:
-    container_name: private-chat-service
-    env_file:
-      - .env
-    image: kamomillte/private-chat-service
-    ports:
-      - "8084:8084"
-    depends_on:
-      - private_chats_db
-      - gateway
-      - config-server
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
-
-  user-model-service:
-    container_name: user-model-service
-    env_file:
-      - .env
-    image: kamomillte/user-model-service
-    ports:
-      - "8083:8083"
-    depends_on:
-      - users_db
-      - gateway
-      - config-server
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
+networks:
+  backend:
+    name: backend
+    external: true
 
 volumes:
   feed_data:
   users_data:
   private_chats:
-
-secrets:
-  GIT_PRIVATE_KEY:
-    file: ../config-server/src/main/resources/env.yml
+  keycloak_data:

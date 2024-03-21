@@ -13,3 +13,4 @@ eureka:
     serviceUrl:
       defaultZone: http://discovery-server:8761/eureka/
 
+gateway.url: http;//discovery-server:8765

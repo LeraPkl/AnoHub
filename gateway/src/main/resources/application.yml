@@ -15,6 +15,10 @@ spring:
           uri: lb://feed-service
           predicates:
             - Path=/feed-app/api/**
+        - id: authentication_service
+          uri: lb://authentication-service
+          predicates:
+            - Path=/authentication-app/api/**
 
   config:
     import: optional:configserver:http://localhost:8888/config-server

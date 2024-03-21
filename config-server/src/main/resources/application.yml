@@ -14,4 +14,6 @@ eureka:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
 
+gateway.url: http;//localhost:8765
+
 server.port: 8888
