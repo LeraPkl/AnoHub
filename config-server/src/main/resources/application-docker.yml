@@ -5,7 +5,7 @@ spring:
     config:
       server:
         git:
-          uri: git@github.com:LeraPkl/AnoHub.git
+          uri: https://github.com/LeraPkl/AnoHub.git
           username: LeraPkl
           password: ${GITHUB_PAT}
 eureka:

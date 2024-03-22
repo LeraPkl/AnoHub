@@ -56,6 +56,8 @@ services:
       - "5433:5432"
     networks:
       - backend
+    volumes:
+      - keycloak_data:/data/db
 
   keycloak:
     image: bitnami/keycloak:22.0.5
@@ -73,7 +75,7 @@ services:
     depends_on:
       - keycloak-db
     volumes:
-      - ./keycloak_data:/data/keycloak
+      - ./keycloak_data:/opt/jboss/keycloak/standalone/data/
     networks:
       - backend
 
@@ -87,3 +89,4 @@ volumes:
   users_data:
   private_chats:
   keycloak_data:
+  keycloak_db_data:

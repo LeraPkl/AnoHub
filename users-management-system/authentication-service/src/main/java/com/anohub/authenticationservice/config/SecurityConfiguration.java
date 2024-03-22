@@ -35,7 +35,7 @@ public class SecurityConfiguration {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-//                .csrf(withDefaults())
+                .csrf(withDefaults())
                 .cors(withDefaults())
                 .authorizeExchange(it -> it.pathMatchers("/authentication-app/api/*/public/**", "/").permitAll()
                         .anyExchange()

@@ -1,17 +1,17 @@
 spring:
   application.name: authentication-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/keycloak
+    url: jdbc:postgresql://${KEYCLOAK_HOST}:5432/keycloak
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   security.oauth2:
     resourceserver:
       jwt:
-        jwk-set-uri: http://localhost:9080/realms/ano-hub/protocol/openid-connect/certs
+        jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
     client:
       provider:
         keycloak:
-          issuer-uri: http://localhost:9080/realms/ano-hub
+          issuer-uri: http://${KEYCLOAK_HOST}:8080/realms/ano-hub
       registration:
         keycloak-client:
           provider: keycloak
@@ -19,17 +19,13 @@ spring:
           client-secret: ${CLIENT_SECRET}
           authorization-grant-type: authorization_code
           scope: openid
-          redirect-uri: http://localhost:${server.port}/login/oauth2/code/keycloak-client
+          redirect-uri: http://${KEYCLOAK_HOST}:${server.port}/login/oauth2/code/keycloak-client
 
 keycloak:
-  server-url: http://localhost:9080
+  server-url: http://${KEYCLOAK_HOST}:8080
   realm: ano-hub
-jwt:
-  auth:
-    converter:
-      resource-id: keycloak-client
-      principle-attribute: preferred_username
 
-server:
-  port: 8085
-
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-server:8761/eureka/
