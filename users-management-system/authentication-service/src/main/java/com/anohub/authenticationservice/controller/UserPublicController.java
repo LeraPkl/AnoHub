@@ -1,9 +1,10 @@
 package com.anohub.authenticationservice.controller;
 
-import com.anohub.authenticationservice.model.KeycloakService;
 import com.anohub.authenticationservice.model.User;
 import com.anohub.authenticationservice.model.dto.CreateUserRequest;
+import com.anohub.authenticationservice.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -24,8 +25,9 @@ public class UserPublicController {
     }
 
     @PostMapping("/signup")
-    public Mono<ResponseEntity<User>> signup(@RequestBody CreateUserRequest request) {
-        return Mono.just(ResponseEntity.ok(keycloakService.createUser(request)));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<User> signup(@RequestBody CreateUserRequest request) {
+        return Mono.just(keycloakService.createUser(request));
     }
 
     @GetMapping

@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 
 import java.util.stream.Stream;
 
@@ -34,8 +35,8 @@ public class SecurityConfiguration {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .csrf(withDefaults())
+                //.csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .csrf(it -> it.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
                 .cors(withDefaults())
                 .authorizeExchange(it -> it.pathMatchers("/authentication-app/api/*/public/**", "/").permitAll()
                         .anyExchange()

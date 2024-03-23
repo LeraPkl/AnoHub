@@ -19,9 +19,9 @@ public class UserController {
 
     @GetMapping(value = "/token")
     public Mono<String> getToken(@RegisteredOAuth2AuthorizedClient OAuth2AuthorizedClient authorizedClient,
-                                 @AuthenticationPrincipal DefaultOidcUser jwt) {
+                                 @AuthenticationPrincipal DefaultOidcUser user) {
         log.info(authorizedClient.getPrincipalName());
-        return Mono.just(jwt.getAccessTokenHash());
+        return Mono.just(user.getAccessTokenHash());
     }
 
 }
