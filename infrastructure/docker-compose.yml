@@ -1,17 +1,17 @@
 version: '3.7'
 
 services:
-  users_db:
-    container_name: users_db
+  friends_db:
+    container_name: friends_db
     image: postgres:16.1
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: users
+      POSTGRES_DB: friends
     ports:
       - "5432:5432"
     volumes:
-      - users_data:/var/lib/postgresql/data
+      - friends_data:/var/lib/postgresql/data
     networks:
       - backend
 

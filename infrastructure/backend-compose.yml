@@ -74,15 +74,15 @@ services:
     networks:
       - backend
 
-  user-model-service:
-    container_name: user-model-service
+  friends-service:
+    container_name: friends-service
     env_file:
       - .env
-    image: kamomillte/user-model-service
+    image: kamomillte/friends-service
     ports:
       - "8083:8083"
     depends_on:
-      - users_db
+      - friends_db
       - gateway
       - config-server
     environment:

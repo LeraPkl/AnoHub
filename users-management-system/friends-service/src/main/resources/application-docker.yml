@@ -1,0 +1,25 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://${FRIENDS_DB_HOST}:5432/friends
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    locations: classpath:db/migration
+    user: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${FRIENDS_DB_HOST}:5432/friends
+    driver-class-name: org.postgresql.Driver
+
+  config:
+    import: optional:configserver:http://config-server:8888/config-server
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://discovery-server:8761/eureka/
+
+server:
+  port: 8083
