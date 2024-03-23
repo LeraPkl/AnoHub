@@ -2,7 +2,7 @@ rootProject.name = 'AnoHub'
 
 include 'discovery-server'
 include 'users-management-system'
-include 'users-management-system:friends-service'
+include 'interaction-system:friends-service'
 include 'users-management-system:authentication-service'
 include 'interaction-system'
 include 'interaction-system:feed-service'
