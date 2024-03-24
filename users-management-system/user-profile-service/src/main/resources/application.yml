@@ -1,0 +1,28 @@
+spring:
+  application.name: user-profile-service
+  r2dbc:
+    url: r2dbc:pool:postgresql://localhost:5434/user_profiles
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    locations: classpath:db/migration
+    user: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://localhost:5434/user_profiles
+    driver-class-name: org.postgresql.Driver
+
+  config:
+    import: optional:configserver:http://localhost:8888/config-server
+
+server:
+  port: 8083

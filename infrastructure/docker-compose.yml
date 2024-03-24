@@ -80,6 +80,20 @@ services:
     networks:
       - backend
 
+  user_profiles_db:
+    container_name: user_profiles_db
+    image: postgres:16.1
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: user_profiles
+    ports:
+      - "5434:5432"
+    volumes:
+      - user_profiles_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
 networks:
   backend:
     name: backend
@@ -87,7 +101,8 @@ networks:
 
 volumes:
   feed_data:
-  users_data:
+  friends_data:
   private_chats:
   keycloak_data:
   keycloak_db_data:
+  user_profiles_data:
