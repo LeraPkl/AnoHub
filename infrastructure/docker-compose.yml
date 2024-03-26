@@ -47,6 +47,7 @@ services:
 
   keycloak-db:
     image: postgres:16.1
+    container_name: keycloak_db
     environment:
       POSTGRES_URL: jdbc:postgresql://keycloak-db:5432/keycloak
       POSTGRES_DB: keycloak
@@ -62,6 +63,7 @@ services:
   keycloak:
     image: bitnami/keycloak
     user: root
+    container_name: keycloak
     environment:
       KEYCLOAK_ADMIN_USER: ${KEYCLOAK_USER}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
@@ -91,6 +93,39 @@ services:
       - "5434:5432"
     volumes:
       - user_profiles_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  kafka:
+    image: 'bitnami/kafka:3.4.1'
+    container_name: kafka
+    environment:
+      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_CFG_NODE_ID: 0
+      KAFKA_CFG_BROKER_ID: 0
+      KAFKA_CFG_PROCESS_ROLES: controller,broker
+      KAFKA_CFG_LISTENERS: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_HOST}:9092
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      ALLOW_PLAINTEXT_LISTENER: yes
+      KAFKA_KRAFT_CLUSTER_ID: r4zt_wrqTRuT7W2NJsB_GA
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    networks:
+      - backend
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: 'provectuslabs/kafka-ui:latest'
+    ports:
+      - "8080:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka1:9092
+      - KAFKA_CLUSTERS_0_NAME=r4zt_wrqTRuT7W2NJsB_GA
     networks:
       - backend
 

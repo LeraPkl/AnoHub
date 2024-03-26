@@ -46,7 +46,7 @@ public class UserProfile {
 
     private Attitude viewsOnSmoking;
 
-    private PoliticalView politicalViews;
+    private Integer politicalViews;
 
 }
 

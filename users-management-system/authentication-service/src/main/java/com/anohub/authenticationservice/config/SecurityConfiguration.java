@@ -28,15 +28,16 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableReactiveMethodSecurity
 public class SecurityConfiguration {
 
-
     private final JwtAuthConverter jwtAuthConverter;
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                // .csrf(it -> it.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
+//                .cors(ServerHttpSecurity.CorsSpec::disable)
+//                .csrf(withDefaults())
+//                .csrf(it -> it.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
                 .cors(withDefaults())
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(it -> it.pathMatchers("/authentication-app/api/*/public/**", "/").permitAll()
                         .anyExchange()
                         .authenticated()

@@ -7,10 +7,10 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: user_model_service
-          uri: lb://user-model-service/api/**
+        - id: user_profile_service
+          uri: lb://user-profile-service/api/**
           predicates:
-            - Path=/user-model-app/**
+            - Path=/user-profile-app/**
         - id: feed_service
           uri: lb://feed-service
           predicates:

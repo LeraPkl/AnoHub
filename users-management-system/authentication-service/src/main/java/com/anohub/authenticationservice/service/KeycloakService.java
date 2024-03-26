@@ -4,6 +4,8 @@ package com.anohub.authenticationservice.service;
 import com.anohub.authenticationservice.exception.EmailAlreadyExistsException;
 import com.anohub.authenticationservice.model.User;
 import com.anohub.authenticationservice.model.dto.CreateUserRequest;
+import com.anohub.kafkaservice.producer.KafkaProducer;
+import com.anohub.usermodelservice.event.DeleteUserProfileEvent;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.CreatedResponseUtil;
@@ -15,6 +17,8 @@ import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +32,26 @@ public class KeycloakService {
 
     private final Keycloak keycloakClient;
 
+    private final KafkaProducer<DeleteUserProfileEvent> producer;
+
     @Value("${keycloak.realm}")
     private String realm;
 
+    @Value("${kafka.topics.user-profile-deleted}")
+    private String userProfileDeleteTopic;
+
+    @Transactional(readOnly = true)
     public List<User> getUsers() {
         RealmResource realmResource = keycloakClient.realm(realm);
 
         return realmResource.users()
                 .list()
                 .stream()
-                .map(KeycloakService::getUser)
+                .map(KeycloakService::getUserFromRepresentation)
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public User getUserById(String id) {
         RealmResource realmResource = keycloakClient.realm(realm);
 
@@ -48,9 +59,10 @@ public class KeycloakService {
                 .get(id)
                 .toRepresentation();
 
-        return getUser(userRepresentation);
+        return getUserFromRepresentation(userRepresentation);
     }
 
+    @Transactional
     public User createUser(CreateUserRequest request) throws EmailAlreadyExistsException {
 
         UserRepresentation user = createUserRepresentation(request);
@@ -97,6 +109,30 @@ public class KeycloakService {
         user.setRealmRoles(List.of(ROLE_USER));
     }
 
+    @Transactional
+    public Mono<Void> deleteUserById(String userId) {
+        return Mono.fromRunnable(() -> {
+            try (Response response = getUsersResource().delete(userId)) {
+                producer.produce(userProfileDeleteTopic, new DeleteUserProfileEvent(userId));
+            }
+        });
+    }
+
+    public void emailVerification(String userId) {
+
+        UsersResource usersResource = getUsersResource();
+        usersResource.get(userId).sendVerifyEmail();
+    }
+
+    public void updatePassword(String userId) {
+
+        UserResource userResource = getUsersResource().get(userId);
+        List<String> actions = new ArrayList<>();
+        actions.add("UPDATE_PASSWORD");
+        userResource.executeActionsEmail(actions);
+
+    }
+
     private UserRepresentation createUserRepresentation(CreateUserRequest request) {
         UserRepresentation user = new UserRepresentation();
         user.setEmail(request.email());
@@ -106,39 +142,12 @@ public class KeycloakService {
         return user;
     }
 
-
     private UsersResource getUsersResource() {
         RealmResource realm1 = keycloakClient.realm(realm);
         return realm1.users();
     }
 
-
-    public void deleteUserById(String userId) {
-        getUsersResource().delete(userId);
-    }
-
-
-    public void emailVerification(String userId) {
-
-        UsersResource usersResource = getUsersResource();
-        usersResource.get(userId).sendVerifyEmail();
-    }
-
-    public UserResource getUserResource(String userId) {
-        UsersResource usersResource = getUsersResource();
-        return usersResource.get(userId);
-    }
-
-    public void updatePassword(String userId) {
-
-        UserResource userResource = getUserResource(userId);
-        List<String> actions = new ArrayList<>();
-        actions.add("UPDATE_PASSWORD");
-        userResource.executeActionsEmail(actions);
-
-    }
-
-    private static User getUser(UserRepresentation ur) {
+    private static User getUserFromRepresentation(UserRepresentation ur) {
         return User.builder()
                 .id(ur.getId())
                 .email(ur.getEmail())
@@ -146,5 +155,8 @@ public class KeycloakService {
     }
 
 }
+
+
+
 
 
