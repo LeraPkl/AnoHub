@@ -2,9 +2,7 @@ CREATE TABLE IF NOT EXISTS friends
 (
     user_id   VARCHAR NOT NULL,
     friend_id VARCHAR NOT NULL,
-    PRIMARY KEY (user_id, friend_id),
-    FOREIGN KEY (user_id) REFERENCES keycloak.public.user_entity (id),
-    FOREIGN KEY (friend_id) REFERENCES keycloak.public.user_entity (id)
+    PRIMARY KEY (user_id, friend_id)
 );
 
 INSERT INTO friends (user_id, friend_id)

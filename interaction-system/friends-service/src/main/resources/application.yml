@@ -1,6 +1,6 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://localhost:5432/friends
+    url: r2dbc:postgresql://${FRIENDS_DB_HOST:localhost}:5432/friends
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   jpa:
@@ -19,11 +19,11 @@ spring:
     locations: classpath:db/migration
     user: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/friends
+    url: jdbc:postgresql://${FRIENDS_DB_HOST:localhost}:5432/friends
     driver-class-name: org.postgresql.Driver
 
   config:
-    import: optional:configserver:http://localhost:8888/config-server
+    import: configserver:http://${DISCOVERY_SERVER_HOST:localhost}:8888/config-server
 
 server:
   port: 8083

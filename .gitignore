@@ -43,3 +43,4 @@ bin/
 /.fastRequest/
 /infrastructure/.env
 /.idea/
+/infrastructure/local.env

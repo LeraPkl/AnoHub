@@ -10,8 +10,6 @@ services:
       - discovery-server
     ports:
       - "8888:8888"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
     networks:
       - backend
 
@@ -22,8 +20,6 @@ services:
     image: kamomillte/discovery-server
     ports:
       - "8761:8761"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
     networks:
       - backend
 
@@ -36,8 +32,6 @@ services:
       - discovery-server
     ports:
       - "8765:8765"
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
     networks:
       - backend
 
@@ -53,8 +47,6 @@ services:
       - user-model-service
       - gateway
       - config-server
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
     networks:
       - backend
 
@@ -69,8 +61,6 @@ services:
       - private_chats_db
       - gateway
       - config-server
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
     networks:
       - backend
 
@@ -85,8 +75,6 @@ services:
       - friends_db
       - gateway
       - config-server
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
     networks:
       - backend
 
@@ -101,8 +89,46 @@ services:
       - keycloak
       - gateway
       - config-server
-    environment:
-      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - backend
+
+  kafka-service:
+    container_name: kafka-service
+    env_file:
+      - .env
+    image: kamomillte/authentication-service
+    ports:
+      - "8085:8085"
+    depends_on:
+      - kafka
+      - gateway
+      - config-server
+    networks:
+      - backend
+
+  user-profile-service:
+    container_name: kafka-service
+    env_file:
+      - .env
+    image: kamomillte/user-profile-service
+    ports:
+      - "8087:8087"
+    depends_on:
+      - kafka-service
+      - config-server
+    networks:
+      - backend
+
+  user-model-service:
+    container_name: kafka-service
+    env_file:
+      - .env
+    image: kamomillte/user-model-service
+    ports:
+      - "8088:8088"
+    depends_on:
+      - kafka-service
+      - config-server
     networks:
       - backend
 

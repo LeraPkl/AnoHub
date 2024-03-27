@@ -1,19 +1,12 @@
 spring:
+  profiles:
+    active: native
   application.name: config-server
   cloud.config.server.prefix: /config-server
   cloud:
     config:
       server:
-        git:
-          uri: git@github.com:LeraPkl/AnoHub.git
-          username: LeraPkl
-          password: ${GITHUB_PAT}
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-
-gateway.url: http;//localhost:8765
+        native:
+          search-locations: classpath:/config
 
 server.port: 8888

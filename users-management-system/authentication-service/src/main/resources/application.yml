@@ -1,17 +1,21 @@
 spring:
+  config:
+    import: configserver:http://${DISCOVERY_SERVER_HOST:localhost}:8888/config-server
+  profiles:
+    active: kafka
   application.name: authentication-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/keycloak
+    url: jdbc:postgresql://${KEYCLOAK_HOST:localhost}:5433/keycloak
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   security.oauth2:
     resourceserver:
       jwt:
-        jwk-set-uri: http://localhost:9080/realms/ano-hub/protocol/openid-connect/certs
+        jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
     client:
       provider:
         keycloak:
-          issuer-uri: http://localhost:9080/realms/ano-hub
+          issuer-uri: ${keycloak.server-url}/realms/ano-hub
       registration:
         keycloak-client:
           provider: keycloak
@@ -19,36 +23,12 @@ spring:
           client-secret: ${CLIENT_SECRET}
           authorization-grant-type: authorization_code
           scope: openid
-          redirect-uri: http://localhost:${server.port}/login/oauth2/code/keycloak-client
-  config:
-    import: configserver:http://localhost:8888/config-server
-
-  # Kafka Consumer
-  kafka:
-    consumer:
-      bootstrap-servers: localhost:9092
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      group-id: saga-user-group-id
-      auto-offset-reset: latest
-      properties:
-        spring.json.trusted.packages: '*'
-
-    #Kafka Producer
-    producer:
-      bootstrap-servers: localhost:9092
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-  main:
-    web-application-type: reactive
-
-kafka:
-  topics:
-    user-profile-deleted: user-profile-deleted-topic
-    failed-event: failed-event-topic
+          redirect-uri: http://${keycloak.host}:${server.port}/login/oauth2/code/keycloak-client
 
 keycloak:
-  server-url: http://localhost:9080
+  host: ${KEYCLOAK_HOST:localhost}
+  port: ${KEYCLOAK_PORT:9080}
+  server-url: http://${keycloak.host}:${keycloak.port}
   realm: ano-hub
 jwt:
   auth:
@@ -59,6 +39,3 @@ jwt:
 server:
   port: 8085
 
-logging:
-  level:
-    org.springframework.security: DEBUG

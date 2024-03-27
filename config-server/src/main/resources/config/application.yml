@@ -1,0 +1,6 @@
+gateway.url: http://${GATEWAY_HOST:localhost}:8765
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${DISCOVERY_SERVER_HOST:localhost}:8761/eureka/

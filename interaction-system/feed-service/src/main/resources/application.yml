@@ -1,14 +1,14 @@
 spring:
-    data:
-        mongodb:
-            database: feed
-            uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@localhost:27017/feed?authSource=admin
-    application:
-        name: feed-service
+  data:
+    mongodb:
+      database: feed
+      uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${FEED_DB_HOST:localhost}:27017/feed?authSource=admin
+  application:
+    name: feed-service
 
-    config:
-      import: optional:configserver:http://localhost:8888/config-server
+  config:
+    import: configserver:http://${DISCOVERY_SERVER_HOST:localhost}:8888/config-server
 
 server:
-    port: 8081
+  port: 8081
 

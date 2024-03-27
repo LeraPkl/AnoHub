@@ -21,7 +21,7 @@ spring:
             - Path=/authentication-app/api/**
 
   config:
-    import: optional:configserver:http://localhost:8888/config-server
+    import: optional:configserver:http://${DISCOVERY_SERVER_HOST:localhost}:8888/config-server
 
 server:
   port: 8765
