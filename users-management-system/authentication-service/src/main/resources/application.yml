@@ -15,7 +15,7 @@ spring:
     client:
       provider:
         keycloak:
-          issuer-uri: ${keycloak.server-url}/realms/ano-hub
+          issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
       registration:
         keycloak-client:
           provider: keycloak

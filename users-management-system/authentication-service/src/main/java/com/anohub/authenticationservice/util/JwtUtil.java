@@ -6,9 +6,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public final class JwtUtil {
 
@@ -20,6 +19,7 @@ public final class JwtUtil {
         return User.builder()
                 .id(getSubject(jwt))
                 .email(jwt.getClaim(EMAIL))
+                .authorities(extractResourceRoles(jwt))
                 .build();
     }
 
@@ -28,19 +28,20 @@ public final class JwtUtil {
         return jwt.getClaim(claimName);
     }
 
-    public static Set<SimpleGrantedAuthority> extractResourceRoles(Jwt jwt) {
+    public static List<SimpleGrantedAuthority> extractResourceRoles(Jwt jwt) {
 
         Map<String, Object> realmAccess = jwt.getClaim(REALM_ACCESS);
 
         if (realmAccess == null) {
-            return Set.of();
+            return List.of();
         }
 
         Collection<String> resourceRoles = (Collection<String>) realmAccess.get(ROLES);
 
         return resourceRoles
                 .stream()
-                .map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+                .map(SimpleGrantedAuthority::new)
+                .toList();
     }
 }
 

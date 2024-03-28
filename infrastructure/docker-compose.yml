@@ -57,8 +57,6 @@ services:
       - "5433:5432"
     networks:
       - backend
-    volumes:
-      - keycloak_data:/data/db
 
   keycloak:
     image: bitnami/keycloak
@@ -78,7 +76,15 @@ services:
     depends_on:
       - keycloak-db
     volumes:
-      - ./keycloak_data:/opt/jboss/keycloak/standalone/data/
+      - ./keycloak/theme:/opt/bitnami/keycloak/themes/
+      - ./keycloak/keycloak_data:/opt/bitnami/keycloak/data/import
+    command: /opt/bitnami/keycloak/bin/kc.sh start-dev --import-realm
+    #    command: |
+    #      /bin/bash -c "chmod +x /opt/bitnami/keycloak/bin/kc.sh &&
+    #      /opt/bitnami/keycloak/bin/kc.sh --verbose start-dev --import-realm
+    #      --spi-theme-static-max-age=-1
+    #      --spi-theme-cache-themes=false
+    #      --spi-theme-cache-templates=false"
     networks:
       - backend
 
@@ -100,16 +106,16 @@ services:
     image: 'bitnami/kafka:3.4.1'
     container_name: kafka
     environment:
-      KAFKA_ENABLE_KRAFT: yes
+      KAFKA_ENABLE_KRAFT: true
       KAFKA_CFG_NODE_ID: 0
       KAFKA_CFG_BROKER_ID: 0
       KAFKA_CFG_PROCESS_ROLES: controller,broker
       KAFKA_CFG_LISTENERS: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
       KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
-      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_HOST:localhost}:9092
+      KAFKA_CFG_ADVERTISED_LISTENERS: PLAINTEXT://${KAFKA_HOST}:9092
       KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      ALLOW_PLAINTEXT_LISTENER: yes
+      ALLOW_PLAINTEXT_LISTENER: true
       KAFKA_KRAFT_CLUSTER_ID: r4zt_wrqTRuT7W2NJsB_GA
       KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: true
     ports:
@@ -130,3 +136,5 @@ volumes:
   keycloak_data:
   keycloak_db_data:
   user_profiles_data:
+
+
