@@ -25,12 +25,13 @@ public class UserProfileService {
     @KafkaListener(topics = "#{'${kafka.topics.user-profile-deleted}'}")
     public void handleUserProfileDeletion(DeleteUserProfileEvent event) {
 
-        userProfileRepository.findByUserId(event.getUserId())
-                .doOnNext(userProfile -> log.info("deleting user profile with user id: {}", userProfile.getUserId()))
-                .flatMap(userProfileRepository::delete)
+        userProfileRepository.deleteByUserId(event.getUserId())
                 .doOnError(e ->
                         kafkaTemplate.send(failedEventTopic,
-                                new FailedEvent("user-profile-service", "DELETE_USER", "test"))
+                                new FailedEvent(
+                                        "user-profile-service",
+                                        "DELETE_USER",
+                                        e.getMessage()))
                 )
                 .subscribe();
     }

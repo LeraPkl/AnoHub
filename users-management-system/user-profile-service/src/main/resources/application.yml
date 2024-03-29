@@ -1,30 +1,15 @@
 spring:
   application.name: user-profile-service
-  r2dbc:
-    url: r2dbc:pool:postgresql://localhost:5434/user_profiles
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
-  flyway:
-    baseline-on-migrate: true
-    enabled: true
-    locations: classpath:db/migration
-    user: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://localhost:5434/user_profiles
-    driver-class-name: org.postgresql.Driver
-
   config:
     import: configserver:http://${DISCOVERY_SERVER_HOST:localhost}:8888/config-server
   profiles:
     active: kafka
+  cassandra:
+    keyspace-name: user_profiles
+    local-datacenter: dc1
+    contact-points: ${USER_PROFILES_DB_HOST:localhost}:9042
+    username: ${CASSANDRA_USER}
+    password: ${CASSANDRA_PASSWORD}
 
 server:
   port: 8087

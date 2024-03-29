@@ -79,28 +79,67 @@ services:
       - ./keycloak/theme:/opt/bitnami/keycloak/themes/
       - ./keycloak/keycloak_data:/opt/bitnami/keycloak/data/import
     command: /opt/bitnami/keycloak/bin/kc.sh start-dev --import-realm
-    #    command: |
-    #      /bin/bash -c "chmod +x /opt/bitnami/keycloak/bin/kc.sh &&
-    #      /opt/bitnami/keycloak/bin/kc.sh --verbose start-dev --import-realm
-    #      --spi-theme-static-max-age=-1
-    #      --spi-theme-cache-themes=false
-    #      --spi-theme-cache-templates=false"
     networks:
       - backend
 
   user_profiles_db:
     container_name: user_profiles_db
-    image: postgres:16.1
+    image: cassandra:latest
+    command: >
+      bash -c 'if [[ "$$CASSANDRA_USER" && "$$CASSANDRA_PASSWORD" ]]; then 
+      /usr/local/bin/docker-entrypoint.sh; 
+      fi && 
+      until echo "describe cluster;" | cqlsh -u $$CASSANDRA_USER -p $$CASSANDRA_PASSWORD; do 
+      echo "Waiting for Cassandra..."; 
+      sleep 5; 
+      done && 
+      cqlsh -u $$CASSANDRA_USER -p $$CASSANDRA_PASSWORD -f /init.cql'
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: user_profiles
+      CASSANDRA_CLUSTER_NAME: abo_hub
+      CASSANDRA_DC: dc1
+      #      CASSANDRA_RACK: rack1
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+      CASSANDRA_USER: ${CASSANDRA_USER}
+      CASSANDRA_PASSWORD: ${CASSANDRA_PASSWORD}
+      MAX_HEAP_SIZE: 256M
+      HEAP_NEWSIZE: 128M
     ports:
-      - "5434:5432"
+      - "9042:9042"
     volumes:
-      - user_profiles_data:/var/lib/postgresql/data
+      - user_profiles_data:/var/lib/cassandra
+      - ./db/cassandra/init.cql:/init.cql
+    healthcheck:
+      test: [ "CMD-SHELL", "cqlsh -e 'describe cluster'" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     networks:
       - backend
+
+
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      - "CASSANDRA_CLUSTER_NAME=abo_hub"
+      - "MAX_HEAP_SIZE=256M"
+      - "HEAP_NEWSIZE=128M"
+    restart: always
+    volumes:
+      - user_profiles_data:/var/lib/cassandra
+
+  cassandra-load-keyspace:
+    container_name: cassandra-load-keyspace
+    image: cassandra:latest
+    environment:
+      - "CASSANDRA_CLUSTER_NAME=abo_hub"
+    depends_on:
+      - cassandra
+    volumes:
+      - ./db/cassandra/init.cql:/init.cql
+    command: /bin/bash -c "echo loading cassandra keyspace && cqlsh cassandra -f /init.cql"
 
   kafka:
     image: 'bitnami/kafka:3.4.1'
