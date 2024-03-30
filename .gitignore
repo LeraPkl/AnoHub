@@ -41,6 +41,6 @@ bin/
 ### Mac OS ###
 .DS_Store
 /.fastRequest/
-/infrastructure/.env
 /.idea/
-/infrastructure/local.env
+/infrastructure/docker/.env
+/infrastructure/docker/local.env

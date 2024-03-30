@@ -6,8 +6,9 @@ spring:
     active: kafka
   cassandra:
     keyspace-name: user_profiles
-    local-datacenter: dc1
-    contact-points: ${USER_PROFILES_DB_HOST:localhost}:9042
+    local-datacenter: datacenter1
+    #    contact-points: localhost
+    #    contact-points: ${USER_PROFILES_DB_HOST:localhost}:9042
     username: ${CASSANDRA_USER}
     password: ${CASSANDRA_PASSWORD}
 

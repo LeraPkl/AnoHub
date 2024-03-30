@@ -6,12 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 public class PostLikeService {
 
+    private final TransactionalOperator transactionalOperator;
     private final PostLikeRepository postLikeRepository;
 
     public Mono<ResponseEntity<Object>> toggleLike(String postId, Long userId) {
@@ -23,7 +25,8 @@ public class PostLikeService {
                                 .userId(userId)
                                 .isLike(true)
                                 .build())
-                        .map(savedLike -> new ResponseEntity<>(savedLike, HttpStatus.CREATED)));
+                        .map(savedLike -> new ResponseEntity<>(savedLike, HttpStatus.CREATED)))
+                .as(transactionalOperator::transactional);
     }
 
 
@@ -36,6 +39,7 @@ public class PostLikeService {
                                 .userId(userId)
                                 .isLike(false)
                                 .build())
-                        .map(savedLike -> new ResponseEntity<>(savedLike, HttpStatus.CREATED)));
+                        .map(savedLike -> new ResponseEntity<>(savedLike, HttpStatus.CREATED)))
+                .as(transactionalOperator::transactional);
     }
 }

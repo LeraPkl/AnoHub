@@ -15,7 +15,7 @@ public class ChatDeletionScheduler {
 
     private final ChatService chatService;
 
-    @Scheduled(cron = "* * * * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void deleteExpiredChats() {
         LocalDateTime now = LocalDateTime
                 .now(ZoneOffset.UTC);

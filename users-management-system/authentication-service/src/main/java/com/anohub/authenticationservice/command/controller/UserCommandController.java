@@ -1,0 +1,31 @@
+package com.anohub.authenticationservice.command.controller;
+
+import com.anohub.authenticationservice.command.service.UserCommandService;
+import com.anohub.authenticationservice.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/authentication-app/api/v1/users")
+@RequiredArgsConstructor
+@Slf4j
+public class UserCommandController {
+
+    private final UserCommandService userService;
+
+    @DeleteMapping("/delete")
+    public void deleteAuthenticatedUser(@AuthenticationPrincipal Jwt jwt) {
+        String id = JwtUtil.getUserFromToken(jwt).getId();
+        userService.deleteUserById(UUID.fromString(id));
+    }
+
+}
+
+

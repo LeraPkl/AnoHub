@@ -1,24 +1,22 @@
 package com.anohub.userprofileservice.model;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
 @Table("user_profile")
 public class UserProfile {
 
-    @Id
-    private Long id;
-
-    @NotBlank
-    private String userId;
+    @PrimaryKey
+    private UUID id;
 
     private String bio;
 
@@ -26,27 +24,31 @@ public class UserProfile {
 
     private List<String> interests = new ArrayList<>();
 
+    @Column("fav_music")
     private List<String> favMusic = new ArrayList<>();
 
+    @Column("fav_movies")
     private List<String> favMovies = new ArrayList<>();
 
+    @Column("fav_games")
     private List<String> favGames = new ArrayList<>();
 
+    @Column("fav_quotes")
     private List<String> favQuotes = new ArrayList<>();
 
+    @Column("inspired_by")
     private List<String> inspiredBy = new ArrayList<>();
 
+    @Column("important_in_others")
     private List<String> importantInOthers = new ArrayList<>();
 
+    @Column("personal_priority")
     private List<String> personalPriority = new ArrayList<>();
 
     private List<String> hobbies = new ArrayList<>();
 
-    private Attitude viewsOnAlcohol;
-
-    private Attitude viewsOnSmoking;
-
-    private Integer politicalViews;
+    @Column("political_views_id")
+    private UUID politicalViewsId;
 
 }
 

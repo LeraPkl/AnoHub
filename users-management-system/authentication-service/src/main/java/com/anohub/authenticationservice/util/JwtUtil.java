@@ -19,7 +19,6 @@ public final class JwtUtil {
         return User.builder()
                 .id(getSubject(jwt))
                 .email(jwt.getClaim(EMAIL))
-                .authorities(extractResourceRoles(jwt))
                 .build();
     }
 

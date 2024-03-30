@@ -5,6 +5,7 @@ import com.anohub.privatechatservice.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -13,22 +14,27 @@ import reactor.core.publisher.Mono;
 public class MessageService {
 
     private final MessageRepository messageRepository;
+    private final TransactionalOperator transactionalOperator;
 
     public Mono<Message> sendMessage(Message message) {
-        return messageRepository.save(message);
+        return messageRepository.save(message)
+                .as(transactionalOperator::transactional);
     }
 
     public Flux<Message> getAllMessagesByChatId(ObjectId chatId) {
-        return messageRepository.findAllByChatId(chatId);
+        return messageRepository.findAllByChatId(chatId)
+                .as(transactionalOperator::transactional);
     }
 
     public Mono<Message> updateMessage(String id, String content) {
         return messageRepository.findById(id)
                 .doOnSuccess(m -> m.setContent(content))
-                .flatMap(messageRepository::save);
+                .flatMap(messageRepository::save)
+                .as(transactionalOperator::transactional);
     }
 
     public Mono<Void> deleteMessage(String id) {
-        return messageRepository.deleteById(id);
+        return messageRepository.deleteById(id)
+                .as(transactionalOperator::transactional);
     }
 }

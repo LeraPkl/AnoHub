@@ -1,9 +1,7 @@
 package com.anohub.authenticationservice.model;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -14,8 +12,7 @@ public class User {
 
     private String id;
 
+    @Email
     private String email;
-
-    private List<? extends GrantedAuthority> authorities;
 
 }

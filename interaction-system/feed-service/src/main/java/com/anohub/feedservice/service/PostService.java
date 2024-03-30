@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostService {
 
+    private final TransactionalOperator transactionalOperator;
     private final PostSortingRepository postSortingRepository;
     private final PostRepository postRepository;
     private final TopicRepository topicRepository;
@@ -45,7 +47,8 @@ public class PostService {
                             p.setTopic(t);
                             return Mono.just(p);
                         })
-                );
+                )
+                .as(transactionalOperator::transactional);
     }
 
     public Flux<Post> getAllPosts() {
@@ -59,7 +62,8 @@ public class PostService {
                             p.setTopic(t);
                             return Mono.just(p);
 
-                        }));
+                        }))
+                .as(transactionalOperator::transactional);
     }
 
     public Mono<Post> updatePost(Post post) {
@@ -70,7 +74,8 @@ public class PostService {
                     dbPost.setContent(post.getContent());
                     dbPost.setUser(post.getUser());
                     return postRepository.save(dbPost);
-                });
+                })
+                .as(transactionalOperator::transactional);
     }
 
     public Mono<Void> deletePost(String id) {
@@ -79,12 +84,14 @@ public class PostService {
 
     public Mono<Page<Post>> findPostsPage(Pageable pageable) {
         return postSortingRepository.findAllBy(pageable)
+                .as(transactionalOperator::transactional)
                 .collectList()
                 .map(list -> new PageImpl<>(list, pageable, list.size()));
     }
 
     public Mono<Page<Post>> findAllPageByPopularity(Pageable pageable) {
         return postRepository.findAll()
+                .as(transactionalOperator::transactional)
                 .flatMap(post -> Mono.zip(
                         postLikeRepository.countByPostIdAndIsLikeTrue(post.getId()),
                         postLikeRepository.countByPostIdAndIsLikeFalse(post.getId()),

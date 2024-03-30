@@ -1,11 +1,13 @@
 package com.anohub.userprofileservice.repository;
 
 import com.anohub.userprofileservice.model.UserProfile;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
-public interface UserProfileRepository extends ReactiveCrudRepository<UserProfile, Long> {
-    Mono<Void> deleteByUserId(String id);
+import java.util.UUID;
 
-    Mono<UserProfile> findByUserId(String id);
+public interface UserProfileRepository extends ReactiveCrudRepository<UserProfile, UUID> {
+
+    Flux<UserProfile> findAllBy(Pageable pageable);
 }

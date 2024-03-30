@@ -5,12 +5,14 @@ import com.anohub.friendsservice.model.Friends;
 import com.anohub.friendsservice.repository.FriendsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
 public class FriendsService {
 
+    private final TransactionalOperator transactionalOperator;
     private final FriendsRepository friendsRepository;
 
     public Mono<Friends> sendFriendRequest(String senderId, String receiverId) {
@@ -26,6 +28,7 @@ public class FriendsService {
                             .user2Id(receiverId)
                             .build();
                     return friendsRepository.save(friendRequest);
-                }));
+                }))
+                .as(transactionalOperator::transactional);
     }
 }
