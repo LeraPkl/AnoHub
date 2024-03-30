@@ -2,6 +2,7 @@ package com.anohub.userprofileservice.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@ToString
 @Table("user_profile")
 public class UserProfile {
 

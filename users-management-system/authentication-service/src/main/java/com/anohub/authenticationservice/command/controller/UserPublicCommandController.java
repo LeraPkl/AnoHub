@@ -18,7 +18,7 @@ public class UserPublicCommandController {
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<User> signup(@RequestBody CreateUserCommand request) {
-        return Mono.just(userService.createUser(request));
+        return userService.createUser(request);
     }
 
 }

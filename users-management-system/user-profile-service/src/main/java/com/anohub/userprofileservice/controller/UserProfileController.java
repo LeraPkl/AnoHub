@@ -42,11 +42,6 @@ public class UserProfileController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public Mono<Void> deleteByUserId(@PathVariable UUID id) {
-        return userProfileService.deleteByUserId(id);
-    }
-
     @GetMapping
     public Flux<UserProfile> getAll(
             @PageableDefault(size = 10) Pageable pageable) {

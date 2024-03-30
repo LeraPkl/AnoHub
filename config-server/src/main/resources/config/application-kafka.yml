@@ -18,3 +18,5 @@ kafka:
   topics:
     user-profile-deleted: user-profile-deleted-topic
     failed-event: failed-event-topic
+    user-profile-deleted-rollback: user-profile-deleted-rollback-topic
+    delete-user-profile-request: delete-user-profile-request-topic

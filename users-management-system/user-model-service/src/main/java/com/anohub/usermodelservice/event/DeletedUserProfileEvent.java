@@ -11,7 +11,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeleteUserProfileEvent {
+public class DeletedUserProfileEvent {
     private UUID userId;
 }
-

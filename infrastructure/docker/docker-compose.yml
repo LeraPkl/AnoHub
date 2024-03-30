@@ -105,6 +105,22 @@ services:
     networks:
       - backend
 
+  redis:
+    image: redis:7.0
+    container_name: redis
+    restart: always
+    depends_on:
+      - redis_insight
+    ports:
+      - "6379:6379"
+
+  redis_insight:
+    image: redislabs/redisinsight:1.9.0
+    container_name: redis_insight
+    restart: always
+    ports:
+      - "8001:8001"
+
 networks:
   backend:
     name: backend

@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.boot:spring-boot-starter-data-cassandra-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 
     implementation 'org.springframework.cloud:spring-cloud-stream'
     implementation 'org.apache.kafka:kafka-streams'

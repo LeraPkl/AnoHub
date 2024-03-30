@@ -92,19 +92,19 @@ services:
     networks:
       - backend
 
-  kafka-service:
-    container_name: kafka-service
-    env_file:
-      - .env
-    image: kamomillte/authentication-service
-    ports:
-      - "8085:8085"
-    depends_on:
-      - kafka
-      - gateway
-      - config-server
-    networks:
-      - backend
+  #  kafka-service:
+  #    container_name: kafka-service
+  #    env_file:
+  #      - .env
+  #    image: kamomillte/authentication-service
+  #    ports:
+  #      - "8085:8085"
+  #    depends_on:
+  #      - kafka
+  #      - gateway
+  #      - config-server
+  #    networks:
+  #      - backend
 
   user-profile-service:
     container_name: kafka-service

@@ -23,7 +23,7 @@ public class UserCommandController {
     @DeleteMapping("/delete")
     public void deleteAuthenticatedUser(@AuthenticationPrincipal Jwt jwt) {
         String id = JwtUtil.getUserFromToken(jwt).getId();
-        userService.deleteUserById(UUID.fromString(id));
+        userService.requestUserDeletionById(UUID.fromString(id));
     }
 
 }

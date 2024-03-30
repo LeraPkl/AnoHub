@@ -1,4 +1,4 @@
-package com.anohub.authenticationservice.config;
+package com.anohub.authenticationservice.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
