@@ -1,103 +1,78 @@
 package com.anohub.authenticationservice.command.service;
 
 import com.anohub.authenticationservice.command.controller.model.CreateUserCommand;
-import com.anohub.authenticationservice.exception.EmailAlreadyExistsException;
 import com.anohub.authenticationservice.model.User;
 import com.anohub.authenticationservice.service.KeycloakService;
+import com.anohub.authenticationservice.util.Constants;
+import com.anohub.authenticationservice.util.UserCreator;
 import com.anohub.usermodelservice.event.DeleteUserEvent;
-import com.anohub.usermodelservice.event.DeletedUserProfileEvent;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.admin.client.CreatedResponseUtil;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
+import reactor.kafka.sender.KafkaSender;
+import reactor.kafka.sender.SenderRecord;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import static com.anohub.authenticationservice.service.KeycloakService.createUserRepresentation;
-import static com.anohub.authenticationservice.service.KeycloakService.setCredentials;
+import static com.anohub.authenticationservice.util.Constants.PENDING_USER_REPRESENTATION;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserCommandService {
 
+    private final UserCreator userCreator;
     private final KeycloakService keycloakService;
-    private final KafkaTemplate<String, DeleteUserEvent> kafkaTemplate;
+    private final KafkaSender<String, DeleteUserEvent> kafkaSender;
+    private final ReactiveRedisTemplate<String, UserRepresentation> redisTemplate;
 
     @Value("${kafka.topics.delete-user-profile-request}")
     private String deleteUserProfileRequest;
 
-    @Value("${kafka.topics.user-profile-deleted-rollback}")
-    private String userProfileDeletedRollbackTopic;
+    public Mono<Void> createPendingUser(CreateUserCommand createUserCommand) {
 
-    @Transactional
-    public Mono<User> createUser(CreateUserCommand request) throws EmailAlreadyExistsException {
+        UserRepresentation user = createUserRepresentation(createUserCommand);
 
-        UserRepresentation user = createUserRepresentation(request);
-        setCredentials(user, request.password());
-        UsersResource usersResource = keycloakService.getUsersResource();
+        UUID id = UUID.randomUUID();
+        user.setId(id.toString());
 
-        try (Response response = usersResource.create(user)) {
-
-            if (Objects.equals(201, response.getStatus())) {
-
-                var userId = CreatedResponseUtil.getCreatedId(response);
-                keycloakService.addRole(userId);
-
-                return Mono.create(c -> c.success(
-                        User.builder()
-                                .id(userId)
-                                .email(request.email())
-                                .build()));
-            } else if (Objects.equals(409, response.getStatus())) {
-                throw new EmailAlreadyExistsException(request.email());
-            }
-        } catch (Exception e) {
-            log.error("User creation failed for email: {} due to: {}", request.email(), e.getMessage());
-            return Mono.error(e);
-        }
-        return Mono.empty();
+        return redisTemplate.opsForValue()
+                .set(PENDING_USER_REPRESENTATION, user)
+                .then();
     }
 
-    public void requestUserDeletionById(UUID userId) {
-        kafkaTemplate.send(deleteUserProfileRequest, new DeleteUserEvent(userId));
+    public Mono<User> createUser() {
+        return userCreator.createUserFromCachedRepresentation(
+                redisTemplate.hasKey(Constants.PENDING_USER_REPRESENTATION).flatMap(hasKey -> {
+                    if (hasKey) {
+                        return redisTemplate.opsForValue()
+                                .get(Constants.PENDING_USER_REPRESENTATION);
+                    }
+                    return Mono.empty();
+                })
+        );
+//                redisTemplate.opsForValue()
+//                        .get(Constants.PENDING_USER_REPRESENTATION).log());
     }
 
-    // TODO: Mono instead of string
-    @KafkaListener(topics = "#{'${kafka.topics.user-profile-deleted}'}")
-    public void deleteUserById(DeletedUserProfileEvent event) {
-
-        String userId = event.getUserId().toString();
-        try (Response delete = keycloakService.getUsersResource().delete(userId)) {
-
-            log.info("User deletion requested for userId: {}. status is {}", userId, delete.getStatus());
-
-            if (delete.getStatus() == 204) {
-                log.info("User deletion successful for userId: {}", userId);
-//                return Mono.just("User deletion successful for userId: " + userId);
-            } else {
-                throw new RuntimeException("Deletion failed. Response Status is " + delete.getStatus());
-            }
-        } catch (Exception e) {
-            kafkaTemplate.send(userProfileDeletedRollbackTopic, null);
-            log.info("User deletion failed for userId: {} due to: {}", event, e.getMessage());
-//            return Mono.just(
-//                    format("User deletion failed for userId: %s due to: %s",
-//                            userId,
-//                            e.getMessage())
-        }
+    public Mono<Void> requestUserDeletionById(UUID userId) {
+        return kafkaSender.send(
+                        Mono.just(SenderRecord.create(
+                                new ProducerRecord<>(deleteUserProfileRequest,
+                                        new DeleteUserEvent(userId)),
+                                null
+                        )))
+                .then();
     }
 
     public void verifyEmail(String userId) {
@@ -114,5 +89,4 @@ public class UserCommandService {
         userResource.executeActionsEmail(actions);
 
     }
-
 }

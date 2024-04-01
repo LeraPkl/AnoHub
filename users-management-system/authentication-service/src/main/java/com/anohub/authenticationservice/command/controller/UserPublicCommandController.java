@@ -15,10 +15,16 @@ public class UserPublicCommandController {
 
     private final UserCommandService userService;
 
-    @PostMapping("/signup")
+    @PostMapping("/create-pending-user")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<User> signup(@RequestBody CreateUserCommand request) {
-        return userService.createUser(request);
+    public Mono<Void> createPendingUser(@RequestBody CreateUserCommand request) {
+        return userService.createPendingUser(request);
+    }
+
+    @PostMapping("/create-user")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<User> createUser() {
+        return userService.createUser();
     }
 
 }

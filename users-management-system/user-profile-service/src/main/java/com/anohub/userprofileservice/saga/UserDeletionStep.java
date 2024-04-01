@@ -2,6 +2,7 @@ package com.anohub.userprofileservice.saga;
 
 import com.anohub.kafkaservice.event.SagaStep;
 import com.anohub.usermodelservice.event.DeleteUserEvent;
+import com.anohub.usermodelservice.event.DeleteUserEventRollbackEvent;
 import com.anohub.usermodelservice.event.DeletedUserProfileEvent;
 import com.anohub.userprofileservice.model.UserProfile;
 import com.anohub.userprofileservice.service.UserProfileService;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class UserDeletionStep implements SagaStep<DeleteUserEvent> {
+public class UserDeletionStep implements SagaStep<DeleteUserEvent, DeleteUserEventRollbackEvent> {
 
     public static final String USER_PROFILE = "user_profile";
     private final UserProfileService userService;
@@ -30,12 +31,11 @@ public class UserDeletionStep implements SagaStep<DeleteUserEvent> {
     @Value("${kafka.topics.user-profile-deleted}")
     private String userProfileDeletedTopic;
 
-    // TODO: make async
     @Override
     @KafkaListener(topics = "#{'${kafka.topics.delete-user-profile-request}'}")
-    public void process(DeleteUserEvent event) {
+    public Mono<Void> process(DeleteUserEvent event) {
         UUID userId = event.getUserId();
-        userService.getUserProfileById(userId)
+        return userService.getUserProfileById(userId)
                 .flatMap(u ->
                         redisTemplate.opsForValue()
                                 .set(USER_PROFILE, u)
@@ -50,20 +50,20 @@ public class UserDeletionStep implements SagaStep<DeleteUserEvent> {
                                             return Mono.empty();
                                         })
                                 )
-                ).block();
+                );
     }
 
     @Override
     @KafkaListener(topics = "#{'${kafka.topics.user-profile-deleted-rollback}'}")
-    public void rollback() {
-        redisTemplate.opsForValue().get(USER_PROFILE)
+    public Mono<Void> rollback(DeleteUserEventRollbackEvent event) {
+        return redisTemplate.opsForValue().get(USER_PROFILE)
                 .flatMap(cachedProfile -> {
                     if (Objects.isNull(cachedProfile)) {
                         return Mono.error(new RuntimeException("Cached profile not found"));
                     }
-                    return userService.createUserProfile(cachedProfile.getId(), cachedProfile)
+                    return userService.createUserProfile(cachedProfile)
                             .doOnSuccess((f) -> redisTemplate.delete(USER_PROFILE))
                             .then();
-                }).block();
+                });
     }
 }

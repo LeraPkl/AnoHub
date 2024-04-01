@@ -1,6 +1,6 @@
-package com.anohub.userprofileservice.configuration;
+package com.anohub.authenticationservice.configuration;
 
-import com.anohub.userprofileservice.model.UserProfile;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +14,11 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 public class RedisConfiguration {
 
     @Bean
-    public ReactiveRedisTemplate<String, UserProfile> reactiveRedisTemplate(
+    public ReactiveRedisTemplate<String, UserRepresentation> reactiveRedisTemplate(
             ReactiveRedisConnectionFactory reactiveRedisConnectionFactory) {
-        return new ReactiveRedisTemplate<String, UserProfile>(
+        return new ReactiveRedisTemplate<String, UserRepresentation>(
                 reactiveRedisConnectionFactory,
-                RedisSerializationContext.fromSerializer(new Jackson2JsonRedisSerializer(UserProfile.class))
+                RedisSerializationContext.fromSerializer(new Jackson2JsonRedisSerializer(UserRepresentation.class))
         );
     }
 }

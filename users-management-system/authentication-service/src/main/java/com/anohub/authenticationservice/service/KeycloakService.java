@@ -31,6 +31,8 @@ public class KeycloakService {
         user.setEmailVerified(false);
         user.setEnabled(true);
 
+        setCredentials(user, request.password());
+
         return user;
     }
 
@@ -52,7 +54,7 @@ public class KeycloakService {
                 .add(List.of(role));
     }
 
-    public static void setCredentials(UserRepresentation user, String password) {
+    private static void setCredentials(UserRepresentation user, String password) {
         CredentialRepresentation credential = new CredentialRepresentation();
         credential.setTemporary(false);
         credential.setType(CredentialRepresentation.PASSWORD);

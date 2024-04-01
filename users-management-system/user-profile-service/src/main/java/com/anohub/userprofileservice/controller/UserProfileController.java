@@ -23,8 +23,8 @@ public class UserProfileController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<UserProfile> create(UUID id, @RequestBody UserProfile userProfile) {
-        return userProfileService.createUserProfile(id, userProfile);
+    public Mono<UserProfile> create(@RequestBody UserProfile userProfile) {
+        return userProfileService.createUserProfile(userProfile);
     }
 
     @PutMapping("/{id}")

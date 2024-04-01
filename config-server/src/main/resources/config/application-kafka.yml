@@ -17,6 +17,8 @@ spring:
 kafka:
   topics:
     user-profile-deleted: user-profile-deleted-topic
-    failed-event: failed-event-topic
     user-profile-deleted-rollback: user-profile-deleted-rollback-topic
     delete-user-profile-request: delete-user-profile-request-topic
+
+    user-profile-created-rollback: user-profile-created-rollback-topic
+    user-profile-created: user-profile-created-rollback-topic

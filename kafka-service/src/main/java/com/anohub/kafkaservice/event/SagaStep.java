@@ -1,7 +1,9 @@
 package com.anohub.kafkaservice.event;
 
-public interface SagaStep<T> {
-    void process(T event);
+import reactor.core.publisher.Mono;
 
-    void rollback();
+public interface SagaStep<T, U> {
+    Mono<Void> process(T event);
+
+    Mono<Void> rollback(U event);
 }
