@@ -36,6 +36,10 @@ jwt:
       resource-id: keycloak-client
       principle-attribute: preferred_username
 
+logging:
+  level:
+    org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: ERROR
+
 server:
   port: 8085
 

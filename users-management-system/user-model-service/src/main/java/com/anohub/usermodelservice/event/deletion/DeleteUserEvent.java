@@ -1,5 +1,6 @@
-package com.anohub.usermodelservice.event;
+package com.anohub.usermodelservice.event.deletion;
 
+import com.anohub.usermodelservice.event.BaseEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeletedUserProfileEvent {
+public class DeleteUserEvent implements BaseEvent {
     private UUID userId;
 }
+

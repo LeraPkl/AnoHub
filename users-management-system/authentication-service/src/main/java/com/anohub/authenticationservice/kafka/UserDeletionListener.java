@@ -1,8 +1,8 @@
 package com.anohub.authenticationservice.kafka;
 
 import com.anohub.authenticationservice.service.KeycloakService;
-import com.anohub.usermodelservice.event.DeleteUserEventRollbackEvent;
-import com.anohub.usermodelservice.event.DeletedUserProfileEvent;
+import com.anohub.usermodelservice.event.deletion.DeleteUserEventFailedEvent;
+import com.anohub.usermodelservice.event.deletion.DeletedUserProfileEvent;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
 public class UserDeletionListener {
 
     private final KeycloakService keycloakService;
-    private final KafkaTemplate<String, DeleteUserEventRollbackEvent> deleteUserKafkaTemplate;
+    private final KafkaTemplate<String, DeleteUserEventFailedEvent> deleteUserKafkaTemplate;
 
-    @Value("${kafka.topics.user-profile-deleted-rollback}")
-    private String userProfileDeletedRollbackTopic;
+    @Value("${kafka.topics.user-profile-deletion-failed}")
+    private String userProfileDeletionFailedTopic;
 
     @KafkaListener(topics = "#{'${kafka.topics.user-profile-deleted}'}")
     public void deleteUserById(DeletedUserProfileEvent event) {
@@ -34,9 +34,8 @@ public class UserDeletionListener {
                 throw new RuntimeException("Deletion failed. Response Status is " + delete.getStatus());
             }
         } catch (Exception e) {
-            deleteUserKafkaTemplate.send(userProfileDeletedRollbackTopic, null);
+            deleteUserKafkaTemplate.send(userProfileDeletionFailedTopic, null);
             log.info("User deletion failed for userId: {} due to: {}", event, e.getMessage());
         }
     }
-
 }

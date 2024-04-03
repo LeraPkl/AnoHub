@@ -1,5 +1,6 @@
-package com.anohub.usermodelservice.event;
+package com.anohub.usermodelservice.event.creation;
 
+import com.anohub.usermodelservice.event.BaseEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,6 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserProfileCreatedRollbackEvent {
+public class UserProfileCreationFailedEvent implements BaseEvent {
     private UUID userId;
 }

@@ -1,5 +1,8 @@
 package com.anohub.authenticationservice.command.controller.model;
 
-public record CreateUserCommand(String password,
+import java.util.UUID;
+
+public record CreateUserCommand(UUID id,
+                                String password,
                                 String email) {
 }
