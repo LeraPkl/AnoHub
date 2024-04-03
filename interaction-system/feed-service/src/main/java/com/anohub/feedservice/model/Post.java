@@ -20,6 +20,8 @@ public class Post {
     @Id
     private String id;
 
+    private String title;
+
     private String topicId;
 
     private Long userId;
