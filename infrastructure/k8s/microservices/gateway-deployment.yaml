@@ -20,6 +20,9 @@ spec:
           image: kamomillte/gateway
           ports:
             - containerPort: 8765
+          envFrom:
+            - configMapRef:
+                name: common-config
       restartPolicy: Always
 
 ---

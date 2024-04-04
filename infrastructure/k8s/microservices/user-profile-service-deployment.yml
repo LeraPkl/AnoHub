@@ -34,4 +34,4 @@ spec:
             - containerPort: 8087
           envFrom:
             - configMapRef:
-                name: user-profile-service-env
+                name: common-config

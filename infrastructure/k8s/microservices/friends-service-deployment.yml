@@ -34,4 +34,4 @@ spec:
             - containerPort: 8083
           envFrom:
             - configMapRef:
-                name: friends-service-env
+                name: common-config

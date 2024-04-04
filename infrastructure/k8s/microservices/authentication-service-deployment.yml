@@ -34,4 +34,4 @@ spec:
             - containerPort: 8085
           envFrom:
             - configMapRef:
-                name: authentication-service-env
+                name: common-config

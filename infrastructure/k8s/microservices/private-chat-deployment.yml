@@ -34,4 +34,4 @@ spec:
             - containerPort: 8084
           envFrom:
             - configMapRef:
-                name: private-chat-service-env
+                name: common-config

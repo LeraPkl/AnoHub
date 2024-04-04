@@ -34,4 +34,4 @@ spec:
             - containerPort: 8081
           envFrom:
             - configMapRef:
-                name: feed-service-env
+                name: common-config
