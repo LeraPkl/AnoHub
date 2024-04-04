@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: private-chat-service
+spec:
+  selector:
+    app: private-chat-service
+  ports:
+    - protocol: TCP
+      port: 8084
+      targetPort: 8084
+  type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: private-chat-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: private-chat-service
+  template:
+    metadata:
+      labels:
+        app: private-chat-service
+    spec:
+      containers:
+        - name: private-chat-service
+          image: kamomillte/private-chat-service
+          ports:
+            - containerPort: 8084
+          envFrom:
+            - configMapRef:
+                name: private-chat-service-env
