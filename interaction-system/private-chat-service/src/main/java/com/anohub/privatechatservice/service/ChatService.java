@@ -25,8 +25,8 @@ public class ChatService {
                 .as(transactionalOperator::transactional);
     }
 
-    public Mono<Void> deleteById(String id) {
-        return chatRepository.findById(id)
+    public Mono<Void> deleteByUsersId(String user1Id, String user2Id) {
+        return chatRepository.findByUser1AndUser2(user1Id, user2Id)
                 .flatMap(chat -> messageRepository.deleteAllByChatId(new ObjectId(chat.getId()))
                         .then(chatRepository.delete(chat)))
                 .as(transactionalOperator::transactional);
@@ -45,6 +45,25 @@ public class ChatService {
 
     public Mono<Chat> findChatByUsersId(String user1, String user2) {
         return chatRepository.findByUser1AndUser2(user1, user2)
+                .as(transactionalOperator::transactional);
+    }
+
+    public Mono<Chat> assignNickname(String user1Id, String user2Id, String user2Nickname) {
+        return chatRepository.findByUser1AndUser2(user1Id, user2Id)
+                .flatMap(chat -> {
+                    if (chat.getUser1().getId().equals(user2Id)) {
+                        chat.getUser1().setNickname(user2Nickname);
+                    } else if (chat.getUser2().getId().equals(user2Id)) {
+                        chat.getUser2().setNickname(user2Nickname);
+                    }
+                    return chatRepository.save(chat);
+                });
+    }
+
+    private Mono<Void> deleteById(String id) {
+        return chatRepository.findById(id)
+                .flatMap(chat -> messageRepository.deleteAllByChatId(new ObjectId(chat.getId()))
+                        .then(chatRepository.delete(chat)))
                 .as(transactionalOperator::transactional);
     }
 }

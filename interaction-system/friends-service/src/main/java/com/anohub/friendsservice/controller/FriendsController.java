@@ -4,12 +4,8 @@ import com.anohub.friendsservice.model.Friends;
 import com.anohub.friendsservice.service.FriendsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -20,11 +16,19 @@ public class FriendsController {
 
     private final FriendsService friendsService;
 
-    @PostMapping("/send-request/{receiverId}")
+    @PostMapping("/send-request/{senderId}/{receiverId}")
     public Mono<Friends> sendFriendRequest(@PathVariable String receiverId,
-                                           @AuthenticationPrincipal DefaultOidcUser user) {
+                                           @PathVariable String senderId) {
 
-        return friendsService.sendFriendRequest(user.getPreferredUsername(), receiverId);
+        return friendsService.sendFriendRequest(senderId, receiverId);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/remove-friend/{senderId}/{receiverId}")
+    public Mono<Void> removeFriend(@PathVariable String receiverId,
+                                   @PathVariable String senderId) {
+
+        return friendsService.removeFriend(senderId, receiverId);
     }
 
 }

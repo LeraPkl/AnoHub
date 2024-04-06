@@ -18,11 +18,9 @@ public class Chat {
     @Id
     private String id;
 
-    private String user1;
+    private User user1;
 
-    private String user2;
-
-    private String user2Nickname;
+    private User user2;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime expiresAt;
@@ -30,10 +28,16 @@ public class Chat {
     private Boolean saveChat;
 
     public Chat() {
-        user2Nickname = "user" + user2;
         expiresAt = LocalDateTime
                 .now(ZoneOffset.UTC)
                 .plusHours(24);
+    }
+
+    @Setter
+    @Getter
+    public static class User {
+        String id;
+        String nickname;
     }
 }
 

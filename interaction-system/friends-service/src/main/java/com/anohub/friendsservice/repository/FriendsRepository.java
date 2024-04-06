@@ -6,4 +6,6 @@ import reactor.core.publisher.Mono;
 
 public interface FriendsRepository extends ReactiveCrudRepository<Friends, String> {
     Mono<Boolean> existsByUser1IdAndUser2Id(String senderId, String receiverId);
+
+    Mono<Void> deleteByUser1IdAndUser2Id(String senderId, String receiverId);
 }

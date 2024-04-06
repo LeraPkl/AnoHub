@@ -31,4 +31,8 @@ public class FriendsService {
                 }))
                 .as(transactionalOperator::transactional);
     }
+
+    public Mono<Void> removeFriend(String senderId, String receiverId) {
+        return friendsRepository.deleteByUser1IdAndUser2Id(senderId, receiverId);
+    }
 }
