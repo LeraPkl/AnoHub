@@ -9,7 +9,8 @@ spec:
       app: discovery-server
   template:
     metadata:
-      name: discovery-server
+      labels:
+        app: discovery-server
     spec:
       containers:
         - name: discovery-server
@@ -21,7 +22,6 @@ spec:
             - configMapRef:
                 name: common-config
       restartPolicy: Always
-
   serviceName: discovery-server
 
 ---
