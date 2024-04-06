@@ -30,6 +30,7 @@ spec:
       containers:
         - name: feed-service
           image: kamomillte/feed-service
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
           envFrom:

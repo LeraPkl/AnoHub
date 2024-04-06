@@ -32,6 +32,7 @@ spec:
           image: kamomillte/user-profile-service
           ports:
             - containerPort: 8087
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: common-config

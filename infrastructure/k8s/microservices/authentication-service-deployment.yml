@@ -30,6 +30,7 @@ spec:
       containers:
         - name: authentication-service
           image: kamomillte/authentication-service
+          imagePullPolicy: Always
           ports:
             - containerPort: 8085
           envFrom:

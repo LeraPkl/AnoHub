@@ -30,6 +30,7 @@ spec:
       containers:
         - name: private-chat-service
           image: kamomillte/private-chat-service
+          imagePullPolicy: Always
           ports:
             - containerPort: 8084
           envFrom:
