@@ -13,7 +13,8 @@ spring:
       bootstrap-servers: ${KAFKA_HOST1:localhost}:9092,${KAFKA_HOST2:localhost}:9094,${KAFKA_HOST3:localhost}:9096
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-
+      properties:
+        enable.idempotence: false
 kafka:
   topics:
     user-profile-deleted: user-profile-deleted-topic
@@ -22,3 +23,5 @@ kafka:
 
     user-profile-creation-failed: user-profile-creation-failed-topic
     user-creation-failed: user-creation-failed-topic
+
+    friend-request-accepted: friend-request-accepted-topic

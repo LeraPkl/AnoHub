@@ -31,4 +31,15 @@ public class FriendsController {
         return friendsService.removeFriend(senderId, receiverId);
     }
 
+    @PostMapping("/accept")
+    public Mono<Friends> acceptFriendRequest(@RequestParam String senderId,
+                                             @RequestParam String receiverId) {
+        return friendsService.acceptFriendRequest(senderId, receiverId);
+    }
+
+    @PostMapping("/decline")
+    public Mono<Void> declineFriendRequest(@RequestParam String senderId,
+                                           @RequestParam String receiverId) {
+        return friendsService.declineFriendRequestAcceptance(senderId, receiverId);
+    }
 }

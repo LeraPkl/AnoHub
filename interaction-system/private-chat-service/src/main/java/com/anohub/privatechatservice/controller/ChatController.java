@@ -15,11 +15,6 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    @PostMapping
-    public Mono<Chat> createChat(@RequestBody Chat chat) {
-        return chatService.createChat(chat);
-    }
-
     @DeleteMapping("/{user1}/{user2}")
     public Mono<Void> deleteChatByUsersId(@PathVariable String user1,
                                           @PathVariable String user2) {

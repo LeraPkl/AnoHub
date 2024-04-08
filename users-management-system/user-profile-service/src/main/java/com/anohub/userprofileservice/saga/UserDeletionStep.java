@@ -39,16 +39,10 @@ public class UserDeletionStep implements SagaStep<DeleteUserEvent, DeleteUserEve
                 .flatMap(u ->
                         redisTemplate.opsForValue()
                                 .set(USER_PROFILE, u)
-                                .then(Mono.defer(() -> {
-                                    log.info("Deleting user with id {}...", userId);
-                                    return userService.deleteById(userId);
-                                }))
-                                .then(Mono.defer(() -> {
-                                            log.info("Sending DeletedUserProfile Event with userId {}...", userId);
-                                            kafkaTemplate.send(userProfileDeletedTopic,
-                                                    new DeletedUserProfileEvent(userId));
-                                            return Mono.empty();
-                                        })
+                                .then(Mono.defer(() -> userService.deleteById(userId)))
+                                .then(Mono.defer(() ->
+                                        kafkaTemplate.send(userProfileDeletedTopic,
+                                                new DeletedUserProfileEvent(userId)).then())
                                 )
                 );
     }

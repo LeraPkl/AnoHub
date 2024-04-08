@@ -5,6 +5,7 @@ services:
     image: 'bitnami/kafka:3.4.1'
     container_name: kafka1
     environment:
+      KAFKA_ENABLE_KRAFT: true
       KAFKA_CFG_NODE_ID: 0
       KAFKA_CFG_BROKER_ID: 0
       KAFKA_CFG_PROCESS_ROLES: controller,broker
@@ -26,6 +27,7 @@ services:
     image: 'bitnami/kafka:3.4.1'
     container_name: kafka2
     environment:
+      KAFKA_ENABLE_KRAFT: true
       KAFKA_CFG_NODE_ID: 1
       KAFKA_CFG_BROKER_ID: 1
       KAFKA_CFG_PROCESS_ROLES: controller,broker
@@ -47,6 +49,7 @@ services:
     image: 'bitnami/kafka:3.4.1'
     container_name: kafka3
     environment:
+      KAFKA_ENABLE_KRAFT: true
       KAFKA_CFG_NODE_ID: 2
       KAFKA_CFG_BROKER_ID: 2
       KAFKA_CFG_PROCESS_ROLES: controller,broker

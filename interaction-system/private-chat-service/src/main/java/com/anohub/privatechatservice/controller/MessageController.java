@@ -21,8 +21,10 @@ public class MessageController {
     }
 
     @GetMapping("/chat/{chatId}")
-    public Flux<Message> getAllMessagesByChatId(@PathVariable ObjectId chatId) {
-        return messageService.getAllMessagesByChatId(chatId);
+    public Flux<Message> getMessagesByChatIdPage(@PathVariable ObjectId chatId,
+                                                 @RequestParam(value = "page", defaultValue = "0") int page,
+                                                 @RequestParam(value = "size", defaultValue = "50") int size) {
+        return messageService.getMessagesByChatIdPage(chatId, page, size);
     }
 
     @PutMapping("/{id}")

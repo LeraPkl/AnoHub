@@ -2,8 +2,10 @@ package com.anohub.privatechatservice.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -12,6 +14,8 @@ import java.time.ZoneOffset;
 
 @Getter
 @Setter
+@ToString
+@AllArgsConstructor
 @Document(collection = "chats")
 public class Chat {
 
@@ -28,6 +32,7 @@ public class Chat {
     private Boolean saveChat;
 
     public Chat() {
+        saveChat = false;
         expiresAt = LocalDateTime
                 .now(ZoneOffset.UTC)
                 .plusHours(24);
@@ -38,6 +43,10 @@ public class Chat {
     public static class User {
         String id;
         String nickname;
+
+        public User(String id) {
+            this.id = id;
+        }
     }
 }
 

@@ -38,6 +38,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
       MONGO_INITDB_DATABASE: private_chats
+      MONGO_REPLICA_SET_NAME: rs0
     ports:
       - "27018:27017"
     volumes:

@@ -24,6 +24,8 @@ spring:
 
   config:
     import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
+  profiles:
+    active: kafka
 
 server:
   port: 8083

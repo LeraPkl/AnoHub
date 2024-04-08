@@ -13,4 +13,6 @@ include 'gateway'
 include 'config-server'
 include 'infrastructure'
 include 'kafka-service'
+include 'interaction-system:interaction-common'
+findProject(':interaction-system:interaction-common')?.name = 'interaction-common'
 
