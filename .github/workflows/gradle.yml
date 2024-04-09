@@ -31,17 +31,11 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker images
-        env:
-          GIT_PRIVATE_KEY: ${{ secrets.GIT_PRIVATE_KEY }}
-        run: ./gradlew bootBuildImage
-
-      - name: Push Docker images
+      - name: Build and Push Docker images
         run: |
           for dir in $(find . -type d -name "src" -exec dirname {} \;); do
-          if grep -q 'bootBuildImage\s*{\s*enabled\s*=\s*true' "$dir/build.gradle"; then
-          service_name=$(basename "$dir")
-          docker tag $service_name:0.0.1-SNAPSHOT ${{ secrets.DOCKER_USERNAME }}/$service_name:${{ github.run_number }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/$service_name:${{ github.run_number }}
-          fi
+            service_name=$(basename "$dir")
+            ./gradlew :$service_name:bootBuildImage
+            docker tag $service_name:0.0.1-SNAPSHOT ${{ secrets.DOCKER_USERNAME }}/$service_name:${{ github.run_number }}
+            docker push ${{ secrets.DOCKER_USERNAME }}/$service_name:${{ github.run_number }}
           done
