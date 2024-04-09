@@ -40,6 +40,6 @@ jobs:
         run: |
           for dir in $(find . -type d -name "src" -exec dirname {} \;); do
             service_name=$(basename "$dir")
-            docker tag $service_name:0.0.1-SNAPSHOT ${{ secrets.DOCKER_USERNAME }}/$service_name:latest
+            docker tag $service_name:0.0.1-SNAPSHOT ${{ secrets.DOCKER_USERNAME }}/$service_name:${{ github.run_number }}
             docker push ${{ secrets.DOCKER_USERNAME }}/$service_name:${{ github.run_number }}
           done
