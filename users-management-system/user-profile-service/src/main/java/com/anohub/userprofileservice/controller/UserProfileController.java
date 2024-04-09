@@ -4,6 +4,7 @@ import com.anohub.userprofileservice.model.UserProfile;
 import com.anohub.userprofileservice.service.UserProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -46,5 +47,13 @@ public class UserProfileController {
     public Flux<UserProfile> getAll(
             @PageableDefault(size = 10) Pageable pageable) {
         return userProfileService.getAllUserProfiles(pageable);
+    }
+
+    @Value("${test}")
+    String test;
+
+    @GetMapping("test")
+    public String test() {
+        return test;
     }
 }

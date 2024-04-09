@@ -1,11 +1,16 @@
 spring:
   profiles:
-    active: native
+    active: native,git
   application.name: config-server
   cloud.config.server.prefix: /config-server
   cloud:
     config:
       server:
+        git:
+          uri: https://github.com/LeraPkl/config-server
+          username: LeraPkl
+          password: ${GITHUB_PAT}
+          clone-on-start: true
         native:
           search-locations: classpath:/config
 
