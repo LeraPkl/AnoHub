@@ -24,20 +24,38 @@ bootJar {
     enabled = false
 }
 
+bootBuildImage {
+    enabled = false
+}
+
 subprojects {
+
+    bootJar {
+        enabled = false
+    }
+
+    jar {
+        enabled = true
+    }
+
+    task tagAndPush {
+        doLast {
+            println "bootJar enabled: ${bootJar.getEnabled()}"
+            println "jar enabled: ${jar.getEnabled()}"
+            println "bootBuildImage enabled: ${bootBuildImage.getEnabled()}"
+
+            if (bootBuildImage.getEnabled()) {
+                exec {
+                    commandLine 'docker', 'tag', "${project.name}:0.0.1-SNAPSHOT", "${System.getenv('DOCKER_USERNAME')}/${project.name}:${project.findProperty('tag') ?: 'latest'}"
+                }
+                exec {
+                    commandLine 'docker', 'push', "${System.getenv('DOCKER_USERNAME')}/${project.name}:${project.findProperty('tag') ?: 'latest'}"
+                }
+            }
+        }
+    }
+
     bootBuildImage {
-        enabled = file("${project.projectDir}/src/main").exists()
         imageName = "${System.getenv('DOCKER_USERNAME')}/${project.name}"
-        tags = [project.findProperty('tag') ?: 'latest']
-    }
-
-    task tagDockerImage(type: Exec) {
-        commandLine 'docker', 'tag', "${System.getenv('DOCKER_USERNAME')}/${project.name}:0.0.1-SNAPSHOT", "${System.getenv('DOCKER_USERNAME')}/${project.name}:${project.findProperty('tag') ?: 'latest'}"
-    }
-
-    task pushDockerImage(type: Exec) {
-        enabled = file("${project.projectDir}/src/main").exists()
-        dependsOn tagDockerImage
-        commandLine 'docker', 'push', "${System.getenv('DOCKER_USERNAME')}/${project.name}:${project.findProperty('tag') ?: 'latest'}"
     }
 }

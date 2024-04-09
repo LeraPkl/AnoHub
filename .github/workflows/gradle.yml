@@ -29,11 +29,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker images
-        run: ./gradlew bootBuildImage -Ptag=${{ github.run_number }}
+        run: ./gradlew bootBuildImage
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
-      - name: Push Docker images
-        run: ./gradlew pushDockerImage -Ptag=${{ github.run_number }}
+      - name: Tag and Push Docker images
+        run: ./gradlew tagAndPush -Ptag=${{ github.run_number }}
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
