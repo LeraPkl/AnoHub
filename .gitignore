@@ -44,4 +44,4 @@ bin/
 /.idea/
 /infrastructure/docker/.env
 /infrastructure/docker/local.env
-/infrastructure/k8s/config-maps.yml
+/infrastructure/k8s/secrets.yml
