@@ -35,17 +35,19 @@ subprojects {
     }
 
     task tagAndPushDockerImage {
-        doLast {
-            def dockerUsername = project.findProperty('dockerUsername') ?: System.getenv('DOCKER_USERNAME')
-            def runNumber = project.findProperty('runNumber') ?: 'latest'
-            def serviceName = project.name
-            def version = '0.0.1-SNAPSHOT'
+        if (bootBuildImage.enabled) {
+            doLast {
+                def dockerUsername = project.findProperty('dockerUsername') ?: System.getenv('DOCKER_USERNAME')
+                def runNumber = project.findProperty('runNumber') ?: 'latest'
+                def serviceName = project.name
+                def version = '0.0.1-SNAPSHOT'
 
-            exec {
-                commandLine 'docker', 'tag', "${serviceName}:${version}", "${dockerUsername}/${serviceName}:${runNumber}"
-            }
-            exec {
-                commandLine 'docker', 'push', "${dockerUsername}/${serviceName}:${runNumber}"
+                exec {
+                    commandLine 'docker', 'tag', "${serviceName}:${version}", "${dockerUsername}/${serviceName}:${runNumber}"
+                }
+                exec {
+                    commandLine 'docker', 'push', "${dockerUsername}/${serviceName}:${runNumber}"
+                }
             }
         }
     }
