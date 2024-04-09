@@ -34,5 +34,7 @@ spec:
             - containerPort: 8087
           imagePullPolicy: Always
           envFrom:
+            - secretRef:
+                name: s3cr3ts
             - configMapRef:
                 name: common-config
