@@ -33,4 +33,20 @@ subprojects {
         enabled = bootJar.enabled
         imageName = "${System.getenv('DOCKER_USERNAME')}/${project.name}"
     }
+
+    task tagAndPushDockerImage {
+        doLast {
+            def dockerUsername = project.findProperty('dockerUsername') ?: System.getenv('DOCKER_USERNAME')
+            def runNumber = project.findProperty('runNumber') ?: 'latest'
+            def serviceName = project.name
+            def version = '0.0.1-SNAPSHOT'
+
+            exec {
+                commandLine 'docker', 'tag', "${serviceName}:${version}", "${dockerUsername}/${serviceName}:${runNumber}"
+            }
+            exec {
+                commandLine 'docker', 'push', "${dockerUsername}/${serviceName}:${runNumber}"
+            }
+        }
+    }
 }
