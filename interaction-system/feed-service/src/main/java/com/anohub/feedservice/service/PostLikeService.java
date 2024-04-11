@@ -3,7 +3,7 @@ package com.anohub.feedservice.service;
 import com.anohub.feedservice.model.PostLike;
 import com.anohub.feedservice.repository.PostLikeRepository;
 import com.anohub.feedservice.repository.PostRepository;
-import com.anohub.interactioncommon.event.PostLikeNotificationEvent;
+import com.anohub.interactioncommon.event.NotificationEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
 
+import static java.lang.String.format;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class PostLikeService {
 
     private final TransactionalOperator transactionalOperator;
     private final PostLikeRepository postLikeRepository;
-    private final ReactiveKafkaProducerTemplate<String, PostLikeNotificationEvent> producerTemplate;
+    private final ReactiveKafkaProducerTemplate<String, NotificationEvent> producerTemplate;
     private final PostRepository postRepository;
 
     @Value("${kafka.topics.send-notification}")
@@ -62,19 +64,24 @@ public class PostLikeService {
                 );
     }
 
-
     private Mono<PostLike> sendNotificationAndReturnLike(PostLike like, String postId) {
         return postRepository.findById(postId)
+                .switchIfEmpty(Mono.defer(() -> {
+                    log.warn("post with id {} not found", postId);
+                    return Mono.empty();
+                }))
                 .doOnNext(post -> log.info("Found post: {}", post.getTitle()))
                 .flatMap(post -> producerTemplate.send(sendNotificationTopic,
-                                new PostLikeNotificationEvent(
-                                        post.getTitle(),
+                                new NotificationEvent(
                                         like.getUserId(),
-                                        "Someone liked your post"))
-                )
+                                        format("Someone liked your post \"%s\"", post.getTitle())
+                                ))
+                        .doOnSuccess(s -> log.info("Notification sent for post: {}", post.getTitle()))
+                        .doOnError(e -> log.error("Failed to send notification for post: {}", post.getTitle(), e)))
                 .thenReturn(like)
                 .doOnError(error -> log.error("error in sendNotificationAndReturnLike: {}", error.getMessage()))
                 .doOnSuccess(result -> log.info("notification sent and like returned"));
     }
+
 
 }

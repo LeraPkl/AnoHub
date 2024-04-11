@@ -31,7 +31,7 @@ public class NotificationService {
                 .readStatus(false)
                 .build();
 
-        log.info("Received notification: {}", notification);
+        log.info("Received notification with message: {}", notification.getMessage());
 
         notificationRepository.save(notification)
                 .doOnNext(

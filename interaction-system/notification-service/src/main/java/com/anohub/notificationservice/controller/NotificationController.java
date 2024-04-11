@@ -1,11 +1,9 @@
 package com.anohub.notificationservice.controller;
 
 import com.anohub.notificationservice.model.Notification;
-import com.anohub.notificationservice.repository.NotificationRepository;
+import com.anohub.notificationservice.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,19 +15,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping("notification-app/api/v1/notifications")
 public class NotificationController {
 
-    private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
 
     @GetMapping("/{to}")
     public Mono<ResponseEntity<Notification>> getNotificationByTo(@PathVariable String to) {
-        return notificationRepository.findByTo(to)
+        return notificationService.getNotificationByTo(to)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
-    }
-
-
-    @SendTo("/topic/public")
-    @MessageMapping("/notification")
-    public Notification sendNotification(Notification notification) {
-        return notification;
     }
 }
