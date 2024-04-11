@@ -2,7 +2,7 @@ package com.anohub.friendsservice.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Setter
@@ -10,17 +10,19 @@ import org.springframework.data.relational.core.mapping.Table;
 @Table("friends")
 public class Friends {
 
-    @Id
-    private String id;
+    @Column("user1_id")
+    private Long user1Id;
+
+    @Column("user2_id")
+    private Long user2Id;
 
     private Boolean isAccepted;
 
-    public void setId(String userId1, String userId2) {
-        if (userId1.compareTo(userId2) < 0) {
-            id = userId1 + '_' + userId2;
-        } else {
-            id = userId2 + '_' + userId1;
-        }
+    public void setId(FriendsPK compositeId) {
+        var user2 = compositeId.getUser2Id();
+        var user1 = compositeId.getUser1Id();
+        user1Id = user1.compareTo(user2) < 0 ? user1 : user2;
+        user2Id = user1.compareTo(user2) < 0 ? user2 : user1;
     }
 }
 

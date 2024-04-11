@@ -31,10 +31,10 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
-    implementation project(':interaction-system:interaction-common')
     implementation 'org.springframework.kafka:spring-kafka'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
 
+    implementation project(':interaction-system:interaction-common')
     compileOnly 'io.projectreactor.kafka:reactor-kafka'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

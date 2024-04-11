@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class FriendRequestAcceptedEvent {
 
-    private String from;
-    private String to;
+    private Long from;
+    private Long to;
 }

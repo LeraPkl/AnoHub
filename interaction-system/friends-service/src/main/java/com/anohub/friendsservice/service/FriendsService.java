@@ -1,16 +1,21 @@
 package com.anohub.friendsservice.service;
 
-import com.anohub.friendsservice.exceptions.FriendsAlreadyExistsException;
 import com.anohub.friendsservice.model.Friends;
+import com.anohub.friendsservice.model.FriendsPK;
 import com.anohub.friendsservice.repository.FriendsRepository;
 import com.anohub.interactioncommon.event.FriendRequestAcceptedEvent;
+import com.anohub.interactioncommon.event.NotificationEvent;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
+
+import java.util.Locale;
 
 @Service
 @Slf4j
@@ -19,63 +24,79 @@ public class FriendsService {
 
     private final TransactionalOperator transactionalOperator;
     private final FriendsRepository friendsRepository;
-    private final KafkaTemplate<String, FriendRequestAcceptedEvent> kafkaTemplate;
+    private final KafkaTemplate<String, FriendRequestAcceptedEvent> friendRequestKafkaTemplate;
+    private final KafkaTemplate<String, NotificationEvent> notificationKafkaTemplate;
+    private final MessageSource messageSource;
 
     @Value("${kafka.topics.friend-request-accepted}")
     private String friendRequestAcceptedTopic;
 
-    public Mono<Friends> sendFriendRequest(String senderId, String receiverId) {
+    @Value("${kafka.topics.send-notification}")
+    private String sendNotificationTopic;
 
-        String compositeId = getCompositeId(senderId, receiverId);
+    public Mono<Friends> sendFriendRequest(Long senderId, Long receiverId, @Nullable String message) {
 
-        return friendsRepository.existsById(compositeId)
-                .filter(exists -> !exists)
-                .switchIfEmpty(Mono.error(new FriendsAlreadyExistsException(senderId, receiverId)))
-                .then(Mono.defer(() -> {
-                    Friends friendRequest = new Friends();
-                    friendRequest.setId(senderId, receiverId);
-                    friendRequest.setIsAccepted(false);
-                    return friendsRepository.save(friendRequest);
-                })).as(transactionalOperator::transactional);
-    }
-
-    public Mono<Friends> acceptFriendRequest(String senderId, String receiverId) {
-        String compositeId = getCompositeId(senderId, receiverId);
+        FriendsPK compositeId = getCompositeId(senderId, receiverId);
+        log.info("compositeId: {}", compositeId);
 
         return friendsRepository.findById(compositeId)
+                .switchIfEmpty(Mono.defer(() -> {
+                    Friends friendRequest = new Friends();
+                    friendRequest.setId(compositeId);
+                    friendRequest.setIsAccepted(false);
+                    return friendsRepository.save(friendRequest)
+                            .doOnSuccess(savedFriendRequest -> {
+                                NotificationEvent event =
+                                        new NotificationEvent(receiverId, getNotificationContent(message));
+                                notificationKafkaTemplate.send(sendNotificationTopic, event);
+                            });
+                }))
+                .as(transactionalOperator::transactional);
+    }
+
+
+    public Mono<Friends> acceptFriendRequest(Long senderId, Long receiverId) {
+
+        return friendsRepository.findById(getCompositeId(senderId, receiverId))
                 .flatMap(friendRequest -> {
                     friendRequest.setIsAccepted(true);
                     return friendsRepository.save(friendRequest)
                             .doOnSuccess(savedFriendRequest -> {
                                 FriendRequestAcceptedEvent event =
                                         new FriendRequestAcceptedEvent(senderId, receiverId);
-                                kafkaTemplate.send(friendRequestAcceptedTopic, event);
+                                friendRequestKafkaTemplate.send(friendRequestAcceptedTopic, event);
                             });
                 })
                 .as(transactionalOperator::transactional);
     }
 
-    public Mono<Void> declineFriendRequestAcceptance(String senderId, String receiverId) {
+    public Mono<Void> declineFriendRequestAcceptance(Long senderId, Long receiverId) {
 
-        String compositeId = getCompositeId(senderId, receiverId);
+        var compositeId = getCompositeId(senderId, receiverId);
 
         return friendsRepository.findById(compositeId)
                 .flatMap(friendRequest -> friendsRepository.deleteById(compositeId))
                 .as(transactionalOperator::transactional);
     }
 
-    public Mono<Void> removeFriend(String senderId, String receiverId) {
-        String compositeId = getCompositeId(senderId, receiverId);
+    public Mono<Void> removeFriend(Long senderId, Long receiverId) {
+        var compositeId = getCompositeId(senderId, receiverId);
         return friendsRepository.deleteById(compositeId);
     }
 
-    private String getCompositeId(String userId1, String userId2) {
-        String id;
-        if (userId1.compareTo(userId2) < 0) {
-            id = userId1 + '_' + userId2;
+    public String getNotificationContent(String message) {
+        if (message == null) {
+            return messageSource.getMessage("friendRequest.default", null, Locale.getDefault());
         } else {
-            id = userId2 + '_' + userId1;
+            return messageSource.getMessage("friendRequest.withMessage", new Object[]{message}, Locale.getDefault());
         }
-        return id;
     }
+
+    private FriendsPK getCompositeId(Long userId1, Long userId2) {
+        return FriendsPK.builder()
+                .user1Id(userId1.compareTo(userId2) < 0 ? userId1 : userId2)
+                .user2Id(userId1.compareTo(userId2) < 0 ? userId2 : userId1)
+                .build();
+    }
+
 }
