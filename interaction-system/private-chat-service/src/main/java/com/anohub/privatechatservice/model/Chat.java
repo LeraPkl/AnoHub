@@ -41,10 +41,10 @@ public class Chat {
     @Setter
     @Getter
     public static class User {
-        String id;
+        Long id;
         String nickname;
 
-        public User(String id) {
+        public User(Long id) {
             this.id = id;
         }
     }
