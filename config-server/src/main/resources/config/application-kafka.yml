@@ -25,3 +25,5 @@ kafka:
     user-creation-failed: user-creation-failed-topic
 
     friend-request-accepted: friend-request-accepted-topic
+
+    send-notification: send-notification-topic

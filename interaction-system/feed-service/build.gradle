@@ -34,11 +34,20 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
+    implementation project(':interaction-system:interaction-common')
+    implementation project(':kafka-service')
+    implementation 'org.apache.kafka:kafka-streams'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
+
+    testImplementation project(':kafka-service')
+    compileOnly 'io.projectreactor.kafka:reactor-kafka'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.11.0'
     testImplementation 'io.projectreactor:reactor-test'
 }
 

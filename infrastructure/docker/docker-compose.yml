@@ -19,14 +19,29 @@ services:
     container_name: feed_db
     image: mongo
     restart: always
+    command: mongod --replSet rs0
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+#      SECURITY_AUTHORIZATION: 'disabled'
+      MONGO_REPLICA_SET_NAME: rs0
       MONGO_INITDB_DATABASE: feed
     ports:
       - "27017:27017"
     volumes:
+      - ../db/mongodb/feed:/docker-entrypoint-initdb.d
       - feed_data:/data/db
+    networks:
+      - backend
+
+  notification_db:
+    container_name: notification_db
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: notification
+    ports:
+      - "27019:27017"
+    volumes:
+      - notification_data:/data/db
     networks:
       - backend
 
@@ -110,5 +125,5 @@ volumes:
   friends_data:
   private_chats:
   user_profiles_data:
-
+  notification_data:
 
