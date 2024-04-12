@@ -10,7 +10,7 @@ spring:
         - id: user_profile_service
           uri: lb://user-profile-service/api/**
           predicates:
-            - Path=/user-profile-app/**
+            - Path=/user-profiles-app/**
         - id: feed_service
           uri: lb://feed-service
           predicates:

@@ -24,7 +24,7 @@ public class Post {
 
     private String topicId;
 
-    private Long userId;
+    private String userProfileId;
 
     private String content;
 

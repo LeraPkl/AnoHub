@@ -57,7 +57,7 @@ public class PostLikeService {
                                     .isLike(true)
                                     .build();
                             return postLikeRepository.save(newLike)
-                                    .doOnNext(like -> log.info("saved post like with id: {}", like.getId()))
+                                    .doOnNext(like -> log.info("saved post like with postId: {}", like.getId()))
                                     .flatMap(like -> sendNotificationAndReturnLike(like, postId))
                                     .map(ResponseEntity::ok);
                         })
@@ -67,14 +67,14 @@ public class PostLikeService {
     private Mono<PostLike> sendNotificationAndReturnLike(PostLike like, String postId) {
         return postRepository.findById(postId)
                 .switchIfEmpty(Mono.defer(() -> {
-                    log.warn("post with id {} not found", postId);
+                    log.warn("post with postId {} not found", postId);
                     return Mono.empty();
                 }))
                 .doOnNext(post -> log.info("Found post: {}", post.getTitle()))
                 .flatMap(post -> producerTemplate.send(sendNotificationTopic,
                                 new NotificationEvent(
                                         like.getUserId(),
-                                        format("Someone liked your post \"%s\"", post.getTitle())
+                                        format("Someone liked your post \"%linkToPfp\"", post.getTitle())
                                 ))
                         .doOnSuccess(s -> log.info("Notification sent for post: {}", post.getTitle()))
                         .doOnError(e -> log.error("Failed to send notification for post: {}", post.getTitle(), e)))
@@ -84,4 +84,11 @@ public class PostLikeService {
     }
 
 
+    public Mono<Long> countLikesByPostId(String postId) {
+        return postLikeRepository.countByPostIdAndIsLikeTrue(postId);
+    }
+
+    public Mono<Long> countDislikesByPostId(String postId) {
+        return postLikeRepository.countByPostIdAndIsLikeFalse(postId);
+    }
 }

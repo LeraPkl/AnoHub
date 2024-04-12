@@ -35,6 +35,7 @@ CREATE TABLE user_profile
 (
     id                  UUID PRIMARY KEY,
     bio                 TEXT,
+    link_to_pfp         TEXT,
     interests           LIST<TEXT>,
     relationship        TEXT,
     fav_music           LIST<TEXT>,
@@ -48,10 +49,10 @@ CREATE TABLE user_profile
     hobbies             LIST<TEXT>
 );
 
-INSERT INTO user_profile (id, bio, interests, relationship, fav_music, fav_movies, fav_games, fav_quotes,
+INSERT INTO user_profile (id, bio, link_to_pfp, interests, relationship, fav_music, fav_movies, fav_games, fav_quotes,
                           inspired_by, important_in_others, personal_priority,
                           political_views_id, hobbies)
-VALUES (uuid(), 'Avid reader and hiker', ['Reading', 'Hiking'], 'SINGLE', ['Classical', 'Jazz'],
+VALUES (uuid(), 'Avid reader and hiker', 'https://somepic', ['Reading', 'Hiking'], 'SINGLE', ['Classical', 'Jazz'],
         ['Inception', 'Interstellar'], ['The Witcher', 'Stardew Valley'],
         ['To be or not to be', 'Stay hungry, stay foolish'], ['Nikola Tesla', 'Marie Curie'],
         ['Kindness', 'Creativity'], ['Career and money', 'Personal development'],

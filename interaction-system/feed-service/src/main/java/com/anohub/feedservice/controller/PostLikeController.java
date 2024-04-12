@@ -22,3 +22,4 @@ public class PostLikeController {
         return postLikeService.toggleDislike(postId, userId);
     }
 }
+

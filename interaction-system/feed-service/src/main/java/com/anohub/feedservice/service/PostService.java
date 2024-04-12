@@ -38,7 +38,7 @@ public class PostService {
 
     public Mono<Post> getPost(String id) {
         return postRepository.findById(id)
-                .flatMap(p -> userClient.getUser(p.getUserId())
+                .flatMap(p -> userClient.getUser(p.getUserProfileId())
                         .flatMap(u -> {
                             p.setUser(u);
                             return topicRepository.findById(p.getTopicId());
@@ -53,7 +53,7 @@ public class PostService {
 
     public Flux<Post> getAllPosts() {
         return postRepository.findAll()
-                .flatMap(p -> userClient.getUser(p.getUserId())
+                .flatMap(p -> userClient.getUser(p.getUserProfileId())
                         .flatMap(u -> {
                             p.setUser(u);
                             return topicRepository.findById(p.getTopicId());
@@ -70,7 +70,7 @@ public class PostService {
         return postRepository.findById(post.getId())
                 .flatMap(dbPost -> {
                     dbPost.setTopic(post.getTopic());
-                    dbPost.setUserId(post.getUserId());
+                    dbPost.setUserProfileId(post.getUserProfileId());
                     dbPost.setContent(post.getContent());
                     dbPost.setUser(post.getUser());
                     return postRepository.save(dbPost);

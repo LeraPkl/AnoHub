@@ -31,3 +31,10 @@ db.comments.insertMany([
         createdAt: new Date()
     },
 ]);
+
+db.reposted_posts.insertMany([
+    {
+        postId: "6617b6aa47e4ba383d7b2da9",
+        userProfileId: "9f35c30c-8a15-465e-8027-479d7a70cf96"
+    },
+]);

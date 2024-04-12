@@ -1,4 +1,4 @@
 package com.anohub.feedservice.model.dto;
 
-public record UserDto(Long id) {
+public record UserDto(String id, String linkToPfp) {
 }

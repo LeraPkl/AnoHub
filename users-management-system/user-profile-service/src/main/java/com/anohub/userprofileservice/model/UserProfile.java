@@ -52,5 +52,7 @@ public class UserProfile {
     @Column("political_views_id")
     private UUID politicalViewsId;
 
+    @Column("link_to_pfp")
+    private String linkToPfp;
 }
 

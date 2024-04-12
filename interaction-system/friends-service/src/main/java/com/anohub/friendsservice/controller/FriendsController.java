@@ -21,8 +21,10 @@ public class FriendsController {
     public Mono<Friends> sendFriendRequest(@PathVariable Long receiverId,
                                            @PathVariable Long senderId,
                                            @RequestBody(required = false) FriendRequestMessage friendRequestMessage) {
-
-        return friendsService.sendFriendRequest(senderId, receiverId, friendRequestMessage.message());
+        String message = (friendRequestMessage != null)
+                ? friendRequestMessage.message()
+                : null;
+        return friendsService.sendFriendRequest(senderId, receiverId, message);
     }
 
     @ResponseStatus(HttpStatus.OK)
