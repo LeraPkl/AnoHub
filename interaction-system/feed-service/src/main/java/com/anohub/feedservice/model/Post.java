@@ -1,6 +1,7 @@
 package com.anohub.feedservice.model;
 
 import com.anohub.feedservice.model.dto.UserDto;
+import com.mongodb.lang.Nullable;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -27,6 +28,9 @@ public class Post {
     private String userProfileId;
 
     private String content;
+
+    @Nullable
+    private Poll poll;
 
     @Builder.Default
     private PrivacyLevel privacyLevel = PrivacyLevel.PUBLIC;
