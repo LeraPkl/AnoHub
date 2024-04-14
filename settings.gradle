@@ -3,7 +3,6 @@ rootProject.name = 'AnoHub'
 include 'discovery-server'
 include 'gateway'
 include 'config-server'
-include 'kafka-service'
 
 include 'users-management-system'
 include 'users-management-system:authentication-service'

@@ -93,7 +93,7 @@ services:
       - backend
 
   user-profile-service:
-    container_name: kafka-service
+    container_name: user-profile-service
     env_file:
       - .env
     image: kamomillte/user-profile-service
@@ -105,7 +105,7 @@ services:
       - backend
 
   user-model-service:
-    container_name: kafka-service
+    container_name: user-model-service
     env_file:
       - .env
     image: kamomillte/user-model-service
