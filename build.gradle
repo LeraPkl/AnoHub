@@ -38,7 +38,7 @@ subprojects {
         enabled = true
     }
 
-    task Push {
+    task pushImage {
         doLast {
             if (bootBuildImage.getEnabled()) {
                 exec {

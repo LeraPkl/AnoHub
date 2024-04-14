@@ -3,6 +3,7 @@ package com.anohub.feedservice.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -16,6 +17,6 @@ public class Poll {
     @Setter
     public static class Option {
         private String content;
-        private Integer voteCount;
+        private List<String> voterIds = new ArrayList<>();
     }
 }
