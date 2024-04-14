@@ -35,6 +35,8 @@ spec:
             - name: user-profiles-data
               mountPath: /var/lib/cassandra
           envFrom:
+            - secretRef:
+                name: db-secrets
             - configMapRef:
                 name: common-config
           env:

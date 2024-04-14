@@ -36,5 +36,7 @@ spec:
           envFrom:
             - secretRef:
                 name: s3cr3ts
+            - secretRef:
+                name: db-secrets
             - configMapRef:
                 name: common-config

@@ -35,6 +35,8 @@ spec:
             - name: private-chats-data
               mountPath: /data/db
           envFrom:
+            - secretRef:
+                name: db-secrets
             - configMapRef:
                 name: common-config
   volumeClaimTemplates:

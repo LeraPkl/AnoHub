@@ -65,6 +65,8 @@ spec:
             - name: friends-db-storage
               mountPath: /var/lib/postgresql/data
           envFrom:
+            - secretRef:
+                name: db-secrets
             - configMapRef:
                 name: common-config
   volumeClaimTemplates:

@@ -38,18 +38,11 @@ subprojects {
         enabled = true
     }
 
-    task tagAndPush {
+    task Push {
         doLast {
-            println "bootJar enabled: ${bootJar.getEnabled()}"
-            println "jar enabled: ${jar.getEnabled()}"
-            println "bootBuildImage enabled: ${bootBuildImage.getEnabled()}"
-
             if (bootBuildImage.getEnabled()) {
                 exec {
-                    commandLine 'docker', 'tag', "${project.name}:0.0.1-SNAPSHOT", "${System.getenv('DOCKER_USERNAME')}/${project.name}:${project.findProperty('tag') ?: 'latest'}"
-                }
-                exec {
-                    commandLine 'docker', 'push', "${System.getenv('DOCKER_USERNAME')}/${project.name}:${project.findProperty('tag') ?: 'latest'}"
+                    commandLine 'docker', 'push', "${System.getenv('DOCKER_USERNAME')}/${project.name}:'latest'}"
                 }
             }
         }

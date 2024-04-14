@@ -44,4 +44,5 @@ bin/
 /.idea/
 /infrastructure/docker/.env
 /infrastructure/docker/local.env
-/infrastructure/k8s/secrets.yml
+/infrastructure/k8s/microservices/microservices-secrets.yml
+/infrastructure/k8s/db/db-secrets.yaml
