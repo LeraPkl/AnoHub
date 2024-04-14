@@ -33,7 +33,7 @@ jobs:
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
-      - name: Tag and Push Docker images
+      - name: Push Docker images
         run: ./gradlew pushImage
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

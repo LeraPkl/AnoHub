@@ -42,7 +42,10 @@ subprojects {
         doLast {
             if (bootBuildImage.getEnabled()) {
                 exec {
-                    commandLine 'docker', 'push', "${System.getenv('DOCKER_USERNAME')}/${project.name}:'latest'}"
+                    commandLine 'docker', 'tag', "${project.name}:0.0.1-SNAPSHOT", "${System.getenv('DOCKER_USERNAME')}/${project.name}"
+                }
+                exec {
+                    commandLine 'docker', 'push', "${System.getenv('DOCKER_USERNAME')}/${project.name}"
                 }
             }
         }
