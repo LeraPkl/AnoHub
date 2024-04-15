@@ -7,10 +7,11 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/LeraPkl/config-server
+          uri: https://github.com/LeraPkl/config-server.git
           username: LeraPkl
           password: ${GITHUB_PAT}
           clone-on-start: true
+          timeout: 10
         native:
           search-locations: classpath:/config
 
