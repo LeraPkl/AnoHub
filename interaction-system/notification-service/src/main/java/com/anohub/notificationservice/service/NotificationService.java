@@ -35,7 +35,7 @@ public class NotificationService {
 
         notificationRepository.save(notification)
                 .doOnNext(
-                        n -> template.convertAndSendToUser(n.getTo().toString(), "/topic/public", n)
+                        n -> template.convertAndSendToUser(n.getTo(), "/topic/public", n)
                 ).subscribe();
     }
 

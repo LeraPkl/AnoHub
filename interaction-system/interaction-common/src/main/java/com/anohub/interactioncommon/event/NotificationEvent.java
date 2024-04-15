@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 public class NotificationEvent {
 
-    protected Long to;
+    protected String to;
 
     protected String message;
 

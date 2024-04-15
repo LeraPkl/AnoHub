@@ -34,7 +34,7 @@ public class FriendsService {
     @Value("${kafka.topics.send-notification}")
     private String sendNotificationTopic;
 
-    public Mono<Friends> sendFriendRequest(Long senderId, Long receiverId, @Nullable String message) {
+    public Mono<Friends> sendFriendRequest(String senderId, String receiverId, @Nullable String message) {
 
         FriendsPK compositeId = getCompositeId(senderId, receiverId);
         log.info("compositeId: {}", compositeId);
@@ -55,7 +55,7 @@ public class FriendsService {
     }
 
 
-    public Mono<Friends> acceptFriendRequest(Long senderId, Long receiverId) {
+    public Mono<Friends> acceptFriendRequest(String senderId, String receiverId) {
 
         return friendsRepository.findById(getCompositeId(senderId, receiverId))
                 .flatMap(friendRequest -> {
@@ -70,7 +70,7 @@ public class FriendsService {
                 .as(transactionalOperator::transactional);
     }
 
-    public Mono<Void> declineFriendRequestAcceptance(Long senderId, Long receiverId) {
+    public Mono<Void> declineFriendRequestAcceptance(String senderId, String receiverId) {
 
         var compositeId = getCompositeId(senderId, receiverId);
 
@@ -79,7 +79,7 @@ public class FriendsService {
                 .as(transactionalOperator::transactional);
     }
 
-    public Mono<Void> removeFriend(Long senderId, Long receiverId) {
+    public Mono<Void> removeFriend(String senderId, String receiverId) {
         var compositeId = getCompositeId(senderId, receiverId);
         return friendsRepository.deleteById(compositeId);
     }
@@ -92,7 +92,7 @@ public class FriendsService {
         }
     }
 
-    private FriendsPK getCompositeId(Long userId1, Long userId2) {
+    private FriendsPK getCompositeId(String userId1, String userId2) {
         return FriendsPK.builder()
                 .user1Id(userId1.compareTo(userId2) < 0 ? userId1 : userId2)
                 .user2Id(userId1.compareTo(userId2) < 0 ? userId2 : userId1)

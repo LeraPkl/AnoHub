@@ -30,7 +30,7 @@ public class PostLikeService {
     private String sendNotificationTopic;
 
 
-    public Mono<?> toggleDislike(String postId, Long userId) {
+    public Mono<?> toggleDislike(String postId, String userId) {
         return postLikeRepository.findByPostIdAndUserIdAndIsLikeFalse(postId, userId)
                 .flatMap(postLike -> postLikeRepository.delete(postLike)
                         .then(Mono.just(ResponseEntity.noContent().build())))
@@ -43,7 +43,7 @@ public class PostLikeService {
                 .as(transactionalOperator::transactional);
     }
 
-    public Mono<?> toggleLike(String postId, Long userId) {
+    public Mono<?> toggleLike(String postId, String userId) {
         return postLikeRepository.findByPostIdAndUserIdAndIsLikeTrue(postId, userId)
                 .flatMap(existingLike ->
                         postLikeRepository.delete(existingLike)
@@ -74,7 +74,7 @@ public class PostLikeService {
                 .flatMap(post -> producerTemplate.send(sendNotificationTopic,
                                 new NotificationEvent(
                                         like.getUserId(),
-                                        format("Someone liked your post \"%linkToPfp\"", post.getTitle())
+                                        format("Someone liked your post \"%s\"", post.getTitle())
                                 ))
                         .doOnSuccess(s -> log.info("Notification sent for post: {}", post.getTitle()))
                         .doOnError(e -> log.error("Failed to send notification for post: {}", post.getTitle(), e)))

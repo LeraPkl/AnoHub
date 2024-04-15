@@ -9,7 +9,7 @@ public interface PostLikeRepository extends ReactiveMongoRepository<PostLike, St
 
     Mono<Long> countByPostIdAndIsLikeFalse(String id);
 
-    Mono<PostLike> findByPostIdAndUserIdAndIsLikeTrue(String postId, Long userId);
+    Mono<PostLike> findByPostIdAndUserIdAndIsLikeTrue(String postId, String userId);
 
-    Mono<PostLike> findByPostIdAndUserIdAndIsLikeFalse(String postId, Long userId);
+    Mono<PostLike> findByPostIdAndUserIdAndIsLikeFalse(String postId, String userId);
 }

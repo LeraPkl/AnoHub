@@ -18,7 +18,7 @@ public class Notification {
     @Id
     private String id;
 
-    private Long to;
+    private String to;
 
     private String message;
 

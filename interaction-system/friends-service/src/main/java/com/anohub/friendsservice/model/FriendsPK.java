@@ -8,6 +8,6 @@ import java.io.Serializable;
 @Value
 @Builder
 public class FriendsPK implements Serializable {
-    Long user1Id;
-    Long user2Id;
+    String user1Id;
+    String user2Id;
 }

@@ -20,7 +20,7 @@ public class PostLike {
     private String postId;
 
     @Indexed
-    private Long userId;
+    private String userId;
 
     private Boolean isLike;
 }

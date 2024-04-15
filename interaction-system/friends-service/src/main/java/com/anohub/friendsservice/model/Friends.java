@@ -11,10 +11,10 @@ import org.springframework.data.relational.core.mapping.Table;
 public class Friends {
 
     @Column("user1_id")
-    private Long user1Id;
+    private String user1Id;
 
     @Column("user2_id")
-    private Long user2Id;
+    private String user2Id;
 
     private Boolean isAccepted;
 
