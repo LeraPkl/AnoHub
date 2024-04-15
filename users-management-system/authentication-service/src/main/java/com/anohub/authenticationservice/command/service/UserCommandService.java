@@ -57,12 +57,12 @@ public class UserCommandService {
         usersResource.get(userId).sendVerifyEmail();
     }
 
-    public void updatePassword(String userId) {
+    public Mono<Void> updatePassword(String userId) {
 
         UserResource userResource = keycloakService.getUsersResource().get(userId);
         List<String> actions = new ArrayList<>();
         actions.add("UPDATE_PASSWORD");
-        userResource.executeActionsEmail(actions);
 
+        return Mono.fromRunnable(() -> userResource.executeActionsEmail(actions));
     }
 }
