@@ -26,6 +26,9 @@ spec:
               memory: "700Mi"
           ports:
             - containerPort: 8888
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "native,k8s"
           envFrom:
             - secretRef:
                 name: s3cr3ts

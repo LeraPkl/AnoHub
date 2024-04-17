@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: native,git
   application.name: config-server
   cloud.config.server.prefix: /config-server
   cloud:
