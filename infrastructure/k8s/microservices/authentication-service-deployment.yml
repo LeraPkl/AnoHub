@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: authentication-service
-          image: kamomillte/authentication-service
+          image: docker.io/kamomillte/authentication-service
           imagePullPolicy: Always
           ports:
             - containerPort: 8085
