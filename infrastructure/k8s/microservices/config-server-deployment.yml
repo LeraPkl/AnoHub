@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: config-server
-          image: kamomillte/config-server
+          image: docker.io/kamomillte/config-server
           imagePullPolicy: Always
           resources:
             requests:

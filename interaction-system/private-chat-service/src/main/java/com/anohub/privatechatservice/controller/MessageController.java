@@ -19,7 +19,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @MessageMapping("/send")
-    @SendTo("/topic/messages")
+    @SendTo("/queue/messages")
     public Mono<Message> sendMessage(@RequestBody SendMessageRequest message) {
         return messageService.sendMessage(message);
     }

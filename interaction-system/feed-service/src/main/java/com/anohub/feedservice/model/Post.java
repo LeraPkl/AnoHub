@@ -3,6 +3,7 @@ package com.anohub.feedservice.model;
 import com.anohub.feedservice.model.dto.UserDto;
 import com.mongodb.lang.Nullable;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -27,6 +28,7 @@ public class Post {
 
     private String userProfileId;
 
+    @Length(max = 1000, message = "The content must not exceed 1000 characters")
     private String content;
 
     @Nullable
