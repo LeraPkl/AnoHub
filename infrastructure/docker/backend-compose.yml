@@ -8,6 +8,8 @@ services:
       - discovery-server
     ports:
       - "8888:8888"
+    secrets:
+      - github_private_key
     deploy:
       resources:
         limits:
@@ -63,6 +65,10 @@ services:
       - private_chats_db
       - gateway
       - config-server
+    deploy:
+      resources:
+        limits:
+          memory: 700M
     networks:
       - backend
 
@@ -120,3 +126,7 @@ services:
 networks:
   backend:
     driver: bridge
+
+secrets:
+  github_private_key:
+    file: gh_pk.txt
