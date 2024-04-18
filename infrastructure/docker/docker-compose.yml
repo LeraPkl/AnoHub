@@ -19,7 +19,6 @@ services:
     restart: always
     command: mongod --replSet rs0
     environment:
-#      SECURITY_AUTHORIZATION: 'disabled'
       MONGO_REPLICA_SET_NAME: rs0
       MONGO_INITDB_DATABASE: feed
     ports:

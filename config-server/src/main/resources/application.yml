@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: native,git
   application.name: config-server
   cloud.config.server.prefix: /config-server
   cloud:
@@ -13,7 +11,10 @@ spring:
           clone-on-start: true
           timeout: 10
           skip-ssl-validation: true
-        native:
-          search-locations: classpath:/config
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${DISCOVERY_SERVER_URI:localhost}:8761/eureka/
 
 server.port: 8888

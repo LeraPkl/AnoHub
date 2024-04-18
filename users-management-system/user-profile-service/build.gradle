@@ -42,7 +42,7 @@ dependencies {
     implementation project(':users-management-system:user-model-service')
     implementation project(':kafka-service')
 
-    compileOnly 'io.projectreactor.kafka:reactor-kafka'
+    implementation 'io.projectreactor.kafka:reactor-kafka'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

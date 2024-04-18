@@ -39,8 +39,7 @@ dependencies {
     implementation 'org.apache.kafka:kafka-streams'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
 
-    testImplementation project(':kafka-service')
-    compileOnly 'io.projectreactor.kafka:reactor-kafka'
+    implementation 'io.projectreactor.kafka:reactor-kafka'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
