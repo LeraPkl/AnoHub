@@ -16,8 +16,8 @@ public class ChatController {
     private final ChatService chatService;
 
     @DeleteMapping("/{user1}/{user2}")
-    public Mono<Void> deleteChatByUsersId(@PathVariable Long user1,
-                                          @PathVariable Long user2) {
+    public Mono<Void> deleteChatByUsersId(@PathVariable String user1,
+                                          @PathVariable String user2) {
         return chatService.deleteByUsersId(user1, user2);
     }
 
@@ -27,14 +27,14 @@ public class ChatController {
     }
 
     @GetMapping("/user1/{user1}/{user2}")
-    public Mono<Chat> findChatsByUsersId(@PathVariable Long user1,
-                                         @PathVariable Long user2) {
+    public Mono<Chat> findChatsByUsersId(@PathVariable String user1,
+                                         @PathVariable String user2) {
         return chatService.findChatByUsersId(user1, user2);
     }
 
     @PutMapping("/{user1Id}/assign-nickname")
-    public Mono<ResponseEntity<Chat>> assignNickname(@PathVariable Long user1Id,
-                                                     @RequestParam Long user2Id,
+    public Mono<ResponseEntity<Chat>> assignNickname(@PathVariable String user1Id,
+                                                     @RequestParam String user2Id,
                                                      @RequestParam String nickname) {
         return chatService.assignNickname(user1Id, user2Id, nickname)
                 .map(ResponseEntity::ok)
