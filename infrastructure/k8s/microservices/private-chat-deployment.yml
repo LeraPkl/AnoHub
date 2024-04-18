@@ -31,6 +31,9 @@ spec:
         - name: private-chat-service
           image: kamomillte/private-chat-service
           imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "720Mi"
           ports:
             - containerPort: 8084
           envFrom:

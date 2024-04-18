@@ -8,6 +8,10 @@ services:
       - discovery-server
     ports:
       - "8888:8888"
+    deploy:
+      resources:
+        limits:
+          memory: 700M
     networks:
       - backend
 
