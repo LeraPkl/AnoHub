@@ -26,6 +26,8 @@ public class Message {
 
     private String senderId;
 
+    private String chatId;
+
     @Encrypted
     private String content;
 

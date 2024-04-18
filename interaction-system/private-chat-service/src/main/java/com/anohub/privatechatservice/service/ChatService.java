@@ -6,7 +6,6 @@ import com.anohub.privatechatservice.repository.ChatRepository;
 import com.anohub.privatechatservice.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.types.ObjectId;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.reactive.TransactionalOperator;
@@ -38,7 +37,7 @@ public class ChatService {
 
     public Mono<Void> deleteByUsersId(String user1Id, String user2Id) {
         return chatRepository.findByUser1_IdAndUser2_Id(user1Id, user2Id)
-                .flatMap(chat -> messageRepository.deleteAllByChatId(new ObjectId(chat.getId()))
+                .flatMap(chat -> messageRepository.deleteAllByChatId(chat.getId())
                         .then(chatRepository.delete(chat)))
                 .as(transactionalOperator::transactional);
     }
@@ -73,7 +72,7 @@ public class ChatService {
 
     private Mono<Void> deleteById(String id) {
         return chatRepository.findById(id)
-                .flatMap(chat -> messageRepository.deleteAllByChatId(new ObjectId(chat.getId()))
+                .flatMap(chat -> messageRepository.deleteAllByChatId(chat.getId())
                         .then(chatRepository.delete(chat)))
                 .as(transactionalOperator::transactional);
     }

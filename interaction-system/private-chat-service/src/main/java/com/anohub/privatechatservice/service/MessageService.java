@@ -6,7 +6,6 @@ import com.anohub.privatechatservice.model.SendMessageRequest;
 import com.anohub.privatechatservice.repository.ChatRepository;
 import com.anohub.privatechatservice.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -46,7 +45,7 @@ public class MessageService {
                 .as(transactionalOperator::transactional);
     }
 
-    public Flux<Message> getMessagesByChatIdPage(ObjectId chatId, int page, int size) {
+    public Flux<Message> getMessagesByChatIdPage(String chatId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "sentAt"));
         return messageRepository.findAllByChatId(chatId, pageRequest)
                 .as(transactionalOperator::transactional);

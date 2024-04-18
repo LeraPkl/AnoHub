@@ -4,7 +4,6 @@ import com.anohub.privatechatservice.model.Message;
 import com.anohub.privatechatservice.model.SendMessageRequest;
 import com.anohub.privatechatservice.service.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +24,7 @@ public class MessageController {
     }
 
     @GetMapping("/chat/{chatId}")
-    public Flux<Message> getMessagesByChatIdPage(@PathVariable ObjectId chatId,
+    public Flux<Message> getMessagesByChatIdPage(@PathVariable String chatId,
                                                  @RequestParam(value = "page", defaultValue = "0") int page,
                                                  @RequestParam(value = "size", defaultValue = "50") int size) {
         return messageService.getMessagesByChatIdPage(chatId, page, size);
