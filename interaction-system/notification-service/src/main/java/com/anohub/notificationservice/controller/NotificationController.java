@@ -3,11 +3,9 @@ package com.anohub.notificationservice.controller;
 import com.anohub.notificationservice.model.Notification;
 import com.anohub.notificationservice.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -22,5 +20,11 @@ public class NotificationController {
         return notificationService.getNotificationByTo(to)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("{id}/mark-notification-read")
+    public Mono<Notification> markNotificationRead(@PathVariable String id) {
+        return notificationService.markNotificationRead(id);
     }
 }

@@ -19,7 +19,15 @@ public class NotificationService {
     private final SimpMessagingTemplate template;
 
     public Mono<Notification> getNotificationByTo(String to) {
-        return notificationRepository.findByTo(to);
+        return notificationRepository.findByToOrderByReadStatusDescSentAtAsc(to);
+    }
+
+    public Mono<Notification> markNotificationRead(String id) {
+        return notificationRepository.findById(id)
+                .flatMap(n -> {
+                    n.setReadStatus(true);
+                    return notificationRepository.save(n);
+                });
     }
 
     @KafkaListener(topics = "#{'${kafka.topics.send-notification}'}")
