@@ -2,11 +2,11 @@ spring:
   config:
     import: application-kafka.yml
   cassandra:
+    contact-points: ${USER_PROFILES_DB_HOST:127.0.0.1}:9042
     keyspace-name: user_profiles
     local-datacenter: datacenter1
     username: ${CASSANDRA_USER}
     password: ${CASSANDRA_PASSWORD}
-    contact-points: ${USER_PROFILES_DB_HOST:127.0.0.1}:9042
 
 logging:
   level:
