@@ -3,7 +3,6 @@ kind: ConfigMap
 metadata:
   name: common-config
 data:
-  DISCOVERY_SERVER_URL: "discovery-server:80"
   PRIVATE_CHATS_DB_HOST: "private-chats-db"
   USER_PROFILES_DB_HOST: "user-profiles-db"
   FRIENDS_DB_HOST: "friends-db"

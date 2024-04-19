@@ -32,3 +32,5 @@ spec:
                 name: db-secrets
             - configMapRef:
                 name: common-config
+            - configMapRef:
+                name: kafka-cm

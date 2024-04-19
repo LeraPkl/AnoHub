@@ -4,7 +4,7 @@ metadata:
   name: my-gateway
 spec:
   rules:
-    - host: "example.com"
+    - host: "anohub.com"
       http:
         paths:
           - path: "/authentication-app"
