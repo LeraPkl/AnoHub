@@ -1,9 +1,6 @@
 spring:
-  application.name: user-profile-service
   config:
-    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
-  profiles:
-    active: kafka
+    import: application-kafka.yml
   cassandra:
     keyspace-name: user_profiles
     local-datacenter: datacenter1

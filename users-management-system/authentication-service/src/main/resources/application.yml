@@ -1,8 +1,4 @@
 spring:
-  config:
-    import: configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
-  profiles:
-    active: kafka
   application.name: authentication-service
   datasource:
     url: jdbc:postgresql://${KEYCLOAK_HOST:localhost}:5433/keycloak
