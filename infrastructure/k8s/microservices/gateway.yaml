@@ -1,0 +1,58 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-gateway
+spec:
+  rules:
+    - host: "example.com"
+      http:
+        paths:
+          - path: "/authentication-app"
+            pathType: Prefix
+            backend:
+              service:
+                name: authentication-service
+                port:
+                  number: 8080
+          - path: "/config-server"
+            pathType: Prefix
+            backend:
+              service:
+                name: config-server-service
+                port:
+                  number: 8080
+          - path: "/feed-app"
+            pathType: Prefix
+            backend:
+              service:
+                name: feed-service
+                port:
+                  number: 8080
+          - path: "/friends-app"
+            pathType: Prefix
+            backend:
+              service:
+                name: friends-service
+                port:
+                  number: 8080
+          - path: "/private-chat-app"
+            pathType: Prefix
+            backend:
+              service:
+                name: private-chat-service
+                port:
+                  number: 8080
+          - path: "/user-model"
+            pathType: Prefix
+            backend:
+              service:
+                name: user-model-service
+                port:
+                  number: 8080
+          - path: "/user-profiles-app"
+            pathType: Prefix
+            backend:
+              service:
+                name: user-profile-service
+                port:
+                  number: 8080
