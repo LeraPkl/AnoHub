@@ -1,22 +1,4 @@
 services:
-  config-server:
-    container_name: config-server
-    env_file:
-      - .env
-    image: kamomillte/config-server
-    depends_on:
-      - discovery-server
-    ports:
-      - "8888:8888"
-    secrets:
-      - github_private_key
-    deploy:
-      resources:
-        limits:
-          memory: 700M
-    networks:
-      - backend
-
   discovery-server:
     container_name: discovery-server
     env_file:
@@ -126,7 +108,3 @@ services:
 networks:
   backend:
     driver: bridge
-
-secrets:
-  github_private_key:
-    file: gh_pk.txt

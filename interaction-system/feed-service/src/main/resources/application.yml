@@ -8,9 +8,7 @@ spring:
     name: feed-service
 
   config:
-    import: configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
-  profiles:
-    active: kafka
+    import: application-kafka.yml
 server:
   port: 8081
 
