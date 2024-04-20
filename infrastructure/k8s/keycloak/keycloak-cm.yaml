@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-cm
+data:
+  KEYCLOAK_DATABASE_VENDOR: "postgresql"
+  KEYCLOAK_DATABASE_HOST: "keycloak-db-service"
+  KEYCLOAK_DATABASE_NAME: "keycloak"
+  KEYCLOAK_DATABASE_SCHEMA: "public"
+  KEYCLOAK_EXTRA_ARGS: "--import-realm"
+  KEYCLOAK_CREATE_ADMIN_USER: "true"
+  KEYCLOAK_DATABASE_PORT: "5432"

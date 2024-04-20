@@ -38,7 +38,6 @@ services:
     volumes:
       - ../keycloak/theme:/opt/bitnami/keycloak/themes/
       - ../keycloak/realms/:/opt/bitnami/keycloak/data/import
-    #    command: /opt/bitnami/keycloak/bin/kc.sh start-dev --import-realm
     networks:
       - keycloak
 
