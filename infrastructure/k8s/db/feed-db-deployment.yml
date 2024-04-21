@@ -33,6 +33,11 @@ spec:
           volumeMounts:
             - name: feed-data
               mountPath: /data/db
+          env:
+            - name: MONGO_REPLICA_SET_NAME
+              value: rs0
+            - name: MONGO_INITDB_DATABASE
+              value: feed
           envFrom:
             - secretRef:
                 name: db-secrets
