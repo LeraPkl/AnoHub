@@ -41,7 +41,7 @@ public class Post {
     private LocalDateTime createdAt;
 
     @Transient
-    double popularity;
+    private Double popularity;
 
     @Transient
     private Topic topic;

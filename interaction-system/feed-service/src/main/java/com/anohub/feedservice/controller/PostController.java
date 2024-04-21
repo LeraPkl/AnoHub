@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/feed-app/api/v1/posts")
+@RequestMapping("/api/v1/posts")
 public class PostController {
 
     private final PostService postService;

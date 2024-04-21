@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/feed-app/api/v1/comments")
+@RequestMapping("/api/v1/comments")
 public class CommentController {
 
     private final CommentService commentService;

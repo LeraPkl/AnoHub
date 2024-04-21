@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/authentication-app/api/v1/public/users")
+@RequestMapping("/api/v1/public/users")
 @RequiredArgsConstructor
 public class UserPublicCommandController {
 

@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/friends-app/api/v1/friends")
+@RequestMapping("/api/v1/friends")
 public class FriendsController {
 
     private final FriendsService friendsService;

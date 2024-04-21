@@ -1,4 +1,5 @@
 spring:
+  application.name: user-profile-service
   config:
     import: application-kafka.yml
   cassandra:

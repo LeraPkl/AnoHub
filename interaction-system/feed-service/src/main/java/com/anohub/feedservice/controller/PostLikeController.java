@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/feed-app/api/v1/post-likes")
+@RequestMapping("/api/v1/post-likes")
 public class PostLikeController {
 
     private final PostLikeService postLikeService;

@@ -7,7 +7,7 @@ db.posts.insertMany([
         _id: "6617b6aa47e4ba383d7b2da9",
         title: "First Post",
         topicId: "topic1",
-        userId: 123,
+        userProfileId: "fbc8ff97-f4fd-4ee6-bbdc-d0f6c2418c22",
         content: "This is the first post content",
         privacyLevel: "PUBLIC",
         createdAt: new Date(),

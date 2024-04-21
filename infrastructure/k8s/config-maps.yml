@@ -13,3 +13,4 @@ data:
   KEYCLOAK_PORT: "8080"
   CASSANDRA_CLUSTER_NAME: "abo_hub"
   gateway.url: "http://${GATEWAY_HOST:localhost:8765}"
+  EUREKA_CLIENT_ENABLED: "false"
