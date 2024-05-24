@@ -3,16 +3,16 @@ version: '3.7'
 services:
   keycloak_db:
     image: postgres:16.1
-    container_name: keycloak_db
+    container_name: ${KEYCLOAK_DB_HOST}
     environment:
       POSTGRES_URL: jdbc:postgresql://keycloak-db:5432/keycloak
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${KEYCLOAK_DB_NAME}
+      POSTGRES_USER: ${KEYCLOAK_DB_USER}
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
     volumes:
       - keycloak_db_data:/bitnami/postgresql
     ports:
-      - "5433:5432"
+      - ${KEYCLOAK_DB_PORT_EXP}:${KEYCLOAK_DB_PORT}
     networks:
       - keycloak
 
@@ -24,15 +24,15 @@ services:
       KEYCLOAK_ADMIN_USER: ${KEYCLOAK_USER}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
       KEYCLOAK_DATABASE_VENDOR: postgresql
-      KEYCLOAK_DATABASE_HOST: keycloak_db
-      KEYCLOAK_DATABASE_NAME: keycloak
+      KEYCLOAK_DATABASE_HOST: ${KEYCLOAK_DB_HOST}
+      KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_DB_NAME}
       KEYCLOAK_DATABASE_SCHEMA: public
-      KEYCLOAK_DATABASE_USER: ${POSTGRES_USER}
-      KEYCLOAK_DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      KEYCLOAK_DATABASE_USER: ${KEYCLOAK_DB_USER}
+      KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
       KEYCLOAK_EXTRA_ARGS: --import-realm
-      KEYCLOAK_CREATE_ADMIN_USER: true
+      KEYCLOAK_CREATE_ADMIN_USER: "true"
     ports:
-      - "8080:8080"
+      - ${KEYCLOAK_PORT}:${KEYCLOAK_PORT}
     depends_on:
       - keycloak_db
     volumes:

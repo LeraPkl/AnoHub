@@ -1,13 +1,13 @@
 services:
   config-server:
-    container_name: config-server
+    container_name: ${CONFIG_SERVER_HOST}
     env_file:
       - .env
     image: kamomillte/config-server
     depends_on:
       - discovery-server
     ports:
-      - "8888:8888"
+      - ${CONFIG_SERVER_PORT}:${CONFIG_SERVER_PORT}
     deploy:
       resources:
         limits:
@@ -16,34 +16,34 @@ services:
       - backend
 
   discovery-server:
-    container_name: discovery-server
+    container_name: ${DISCOVERY_SERVER_HOST}
     env_file:
       - .env
     image: kamomillte/discovery-server
     ports:
-      - "8761:8761"
+      - ${DISCOVERY_SERVER_PORT}:${DISCOVERY_SERVER_PORT}
     networks:
       - backend
 
   gateway:
-    container_name: gateway
+    container_name: ${GATEWAY_HOST}
     env_file:
       - .env
     image: kamomillte/gateway
     depends_on:
       - discovery-server
     ports:
-      - "8765:8765"
+      - ${GATEWAY_PORT}:${GATEWAY_PORT}
     networks:
       - backend
 
   feed-service:
-    container_name: feed-service
+    container_name: ${FEED_SERVICE_HOST}
     env_file:
       - .env
     image: kamomillte/feed-service
     ports:
-      - "8081:8081"
+      - ${FEED_SERVICE_PORT}:${FEED_SERVICE_PORT}
     depends_on:
       - feed_db
       - user-model-service
@@ -53,12 +53,12 @@ services:
       - backend
 
   private-chat-service:
-    container_name: private-chat-service
+    container_name: ${PRIVATE_CHAT_HOST}
     env_file:
       - .env
     image: kamomillte/private-chat-service
     ports:
-      - "8084:8084"
+      - ${PRIVATE_CHAT_PORT}:${PRIVATE_CHAT_PORT}
     depends_on:
       - private_chats_db
       - gateway
@@ -67,12 +67,12 @@ services:
       - backend
 
   friends-service:
-    container_name: friends-service
+    container_name: ${FRIENDS_SERVICE_HOST}
     env_file:
       - .env
     image: kamomillte/friends-service
     ports:
-      - "8083:8083"
+      - ${FRIENDS_SERVICE_PORT}:${FRIENDS_SERVICE_PORT}
     depends_on:
       - friends_db
       - gateway
@@ -81,12 +81,12 @@ services:
       - backend
 
   authentication-service:
-    container_name: authentication-service
+    container_name: ${AUTH_HOST}
     env_file:
       - .env
     image: kamomillte/authentication-service
     ports:
-      - "8085:8085"
+      - ${AUTH_PORT}:${AUTH_PORT}
     depends_on:
       - gateway
       - config-server
@@ -94,24 +94,24 @@ services:
       - backend
 
   user-profile-service:
-    container_name: user-profile-service
+    container_name: ${USER_PROFILE_HOST}
     env_file:
       - .env
     image: kamomillte/user-profile-service
     ports:
-      - "8087:8087"
+      - ${USER_PROFILE_PORT}:${USER_PROFILE_PORT}
     depends_on:
       - config-server
     networks:
       - backend
 
   user-model-service:
-    container_name: user-model-service
+    container_name: ${USER_MODEL_HOST}
     env_file:
       - .env
     image: kamomillte/user-model-service
     ports:
-      - "8088:8088"
+      - ${USER_MODEL_PORT}:${USER_MODEL_PORT}
     depends_on:
       - config-server
     networks:
