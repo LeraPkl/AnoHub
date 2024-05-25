@@ -24,4 +24,4 @@ spring:
     import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
 
 server:
-  port: ${GATEWAY_PORT}
+  port: ${GATEWAY_PORT:8765}

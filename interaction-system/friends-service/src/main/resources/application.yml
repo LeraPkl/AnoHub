@@ -1,8 +1,8 @@
 spring:
   r2dbc:
     url: r2dbc:postgresql://${FRIENDS_DB_HOST:localhost}:5432/friends
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    username: ${FRIENDS_DB_USER}
+    password: ${FRIENDS_DB_PASSWORD}
   jpa:
     properties:
       hibernate:
@@ -17,15 +17,15 @@ spring:
     baseline-on-migrate: true
     enabled: true
     locations: classpath:db/migration
-    user: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    user: ${FRIENDS_DB_USER}
+    password: ${FRIENDS_DB_PASSWORD}
     url: jdbc:postgresql://${FRIENDS_DB_HOST:localhost}:5432/friends
     driver-class-name: org.postgresql.Driver
 
   config:
     import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
   profiles:
-    active: ${ACTIVE PROFILE}
+    active: ${ACTIVE PROFILE:kafka}
 
 server:
-  port: ${FRIENDS_SERVICE_PORT}
+  port: ${FRIENDS_SERVICE_PORT:8083}

@@ -2,12 +2,12 @@ spring:
   config:
     import: configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
   profiles:
-    active: ${ACTIVE_PROFILE}
+    active: ${ACTIVE_PROFILE:kafka}
   application.name: authentication-service
   datasource:
-    url: jdbc:postgresql://${KEYCLOAK_HOST:localhost}:5433/keycloak
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${KEYCLOAK_DB_HOST:localhost}:5433/keycloak
+    username: ${KEYCLOAK_DB_USER}
+    password: ${KEYCLOAK_DB_PASSWORD}
   security.oauth2:
     resourceserver:
       jwt:
@@ -41,5 +41,5 @@ logging:
     org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: ERROR
 
 server:
-  port: ${AUTH_PORT}
+  port: ${AUTH_PORT:8085}
 

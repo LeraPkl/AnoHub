@@ -9,7 +9,7 @@ spring:
   config:
     import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
   profiles:
-    active: kafka
+    active: ${ACTIVE_PROFILE:kafka}
 
 server:
-  port: ${PRIVATE_CHAT_PORT}
+  port: ${PRIVATE_CHAT_PORT:8084}

@@ -10,7 +10,7 @@ spring:
   config:
     import: configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
   profiles:
-    active: kafka
+    active: ${ACTIVE_PROFILE:kafka}
 server:
-  port: ${FEED_SERVICE_PORT}
+  port: ${FEED_SERVICE_PORT:8081}
 

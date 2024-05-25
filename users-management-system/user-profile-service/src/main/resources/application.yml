@@ -3,12 +3,12 @@ spring:
   config:
     import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
   profiles:
-    active: ${ACTIVE_PROFILE}
+    active: ${ACTIVE_PROFILE:kafka}
   cassandra:
     keyspace-name: user_profiles
     local-datacenter: datacenter1
-    username: ${CASSANDRA_USER}
-    password: ${CASSANDRA_PASSWORD}
+    username: ${USER_PROFILES_DB_USER}
+    password: ${USER_PROFILES_DB_PASSWORD}
 
 logging:
   level:
@@ -17,4 +17,4 @@ logging:
       consumer.internals.ConsumerCoordinator: ERROR
 
 server:
-  port: ${USER_PROFILE_PORT}
+  port: ${USER_PROFILE_PORT:8087}

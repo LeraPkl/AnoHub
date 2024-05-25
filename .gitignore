@@ -46,3 +46,4 @@ bin/
 /infrastructure/docker/local.env
 /infrastructure/k8s/microservices/microservices-secrets.yml
 /infrastructure/k8s/db/db-secrets.yaml
+/.env
