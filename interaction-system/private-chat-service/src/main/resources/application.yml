@@ -12,4 +12,4 @@ spring:
     active: kafka
 
 server:
-  port: 8084
+  port: ${PRIVATE_CHAT_PORT}

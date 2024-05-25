@@ -2,7 +2,7 @@ spring:
   config:
     import: configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
   profiles:
-    active: kafka
+    active: ${ACTIVE_PROFILE}
   application.name: authentication-service
   datasource:
     url: jdbc:postgresql://${KEYCLOAK_HOST:localhost}:5433/keycloak
@@ -41,5 +41,5 @@ logging:
     org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: ERROR
 
 server:
-  port: 8085
+  port: ${AUTH_PORT}
 

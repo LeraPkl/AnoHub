@@ -5,7 +5,7 @@ spring:
   config:
     import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
   profiles:
-    active: kafka
+    active: ${ACTIVE_PROFILE}
   application.name: notification-service
 
 server:

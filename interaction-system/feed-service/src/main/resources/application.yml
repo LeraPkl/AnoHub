@@ -12,5 +12,5 @@ spring:
   profiles:
     active: kafka
 server:
-  port: 8081
+  port: ${FEED_SERVICE_PORT}
 
