@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: ${ACTIVE_PROFILE:kafka}
   application.name: authentication-service
   datasource:
     url: jdbc:postgresql://${KEYCLOAK_DB_HOST:localhost}:5433/keycloak

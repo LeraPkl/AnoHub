@@ -6,8 +6,8 @@ spring:
   application:
     name: private-chats-service
 
-  profiles:
-    active: ${ACTIVE_PROFILE:kafka}
+  config:
+    import: application-kafka.yml
 
 server:
   port: ${PRIVATE_CHAT_PORT:8084}
