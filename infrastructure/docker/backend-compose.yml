@@ -1,22 +1,4 @@
 services:
-  config-server:
-    container_name: ${CONFIG_SERVER_HOST}
-    env_file:
-      - .env
-    image: kamomillte/config-server
-    build:
-      context: ../../config-server
-      dockerfile: ./Dockerfile
-    depends_on:
-      - discovery-server
-    ports:
-      - ${CONFIG_SERVER_PORT}:${CONFIG_SERVER_PORT}
-    deploy:
-      resources:
-        limits:
-          memory: 700M
-    networks:
-      - backend
 
   discovery-server:
     container_name: ${DISCOVERY_SERVER_HOST}
@@ -60,7 +42,6 @@ services:
       - feed_db
       - user-model-service
       - gateway
-      - config-server
     networks:
       - backend
 
@@ -77,7 +58,6 @@ services:
     depends_on:
       - private_chats_db
       - gateway
-      - config-server
     networks:
       - backend
 
@@ -94,7 +74,6 @@ services:
     depends_on:
       - friends_db
       - gateway
-      - config-server
     networks:
       - backend
 
@@ -110,7 +89,6 @@ services:
       - ${AUTH_PORT}:${AUTH_PORT}
     depends_on:
       - gateway
-      - config-server
     networks:
       - backend
 
@@ -124,8 +102,6 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - ${USER_PROFILE_PORT}:${USER_PROFILE_PORT}
-    depends_on:
-      - config-server
     networks:
       - backend
 
@@ -139,8 +115,6 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - ${USER_MODEL_PORT}:${USER_MODEL_PORT}
-    depends_on:
-      - config-server
     networks:
       - backend
 
