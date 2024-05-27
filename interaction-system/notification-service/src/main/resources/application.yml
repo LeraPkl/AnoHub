@@ -6,5 +6,10 @@ spring:
     import: application-kafka.yml
   application.name: notification-service
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${DISCOVERY_SERVER_URL:http://localhost:8761/eureka}
+
 server:
   port: ${NOTIFICATION_SERVICE_PORT:8086}
