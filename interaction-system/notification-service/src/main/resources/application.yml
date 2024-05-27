@@ -2,8 +2,6 @@ spring:
   data:
     mongodb:
       uri: mongodb://${NOTIFICATION_DB_HOST:localhost}:27019/notification?authSource=admin
-  config:
-    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
   profiles:
     active: ${ACTIVE_PROFILE:kafka}
   application.name: notification-service

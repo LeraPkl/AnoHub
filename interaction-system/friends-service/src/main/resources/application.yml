@@ -22,8 +22,6 @@ spring:
     url: jdbc:postgresql://${FRIENDS_DB_HOST:localhost}:5432/friends
     driver-class-name: org.postgresql.Driver
 
-  config:
-    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
   profiles:
     active: ${ACTIVE PROFILE:kafka}
 
