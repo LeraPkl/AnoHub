@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/feed-app/api/v1/reposted-posts")
+@RequestMapping("/api/v1/reposted-posts")
 public class RepostedPostController {
 
     private final RepostedPostService repostedPostService;

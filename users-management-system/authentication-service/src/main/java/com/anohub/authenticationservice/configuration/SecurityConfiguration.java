@@ -28,7 +28,7 @@ public class SecurityConfiguration {
 //                .csrf(it -> it.csrfTokenRepository(CookieServerCsrfTokenRepository.withHttpOnlyFalse()))
                 .cors(withDefaults())
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(it -> it.pathMatchers("/authentication-app/api/*/public/**", "/").permitAll()
+                .authorizeExchange(it -> it.pathMatchers("/api/*/public/**", "/").permitAll()
                         .anyExchange()
                         .authenticated()
                 )

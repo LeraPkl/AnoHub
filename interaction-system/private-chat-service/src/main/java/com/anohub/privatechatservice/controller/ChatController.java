@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/private-chat-service/api/v1/chats")
+@RequestMapping("/api/v1/chats")
 public class ChatController {
 
     private final ChatService chatService;

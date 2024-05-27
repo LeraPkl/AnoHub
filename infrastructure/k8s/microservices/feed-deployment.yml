@@ -7,7 +7,7 @@ spec:
     app: feed-service
   ports:
     - protocol: TCP
-      port: 8081
+      port: 80
       targetPort: 8081
   type: LoadBalancer
 
@@ -18,7 +18,6 @@ kind: Deployment
 metadata:
   name: feed-service
 spec:
-  replicas: 2
   selector:
     matchLabels:
       app: feed-service
@@ -31,6 +30,9 @@ spec:
         - name: feed-service
           image: kamomillte/feed-service
           imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 500M
           ports:
             - containerPort: 8081
           envFrom:

@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/feed-app/api/v1/posts/poll")
+@RequestMapping("/api/v1/posts/poll")
 public class PollController {
 
     private final PollService pollService;

@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingres
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: localhost
+      http:
+        paths:
+          - path: "/authentication"
+            pathType: Prefix
+            backend:
+              service:
+                name: authentication-service
+                port:
+                  number: 80
+          - path: "/feed"
+            pathType: Prefix
+            backend:
+              service:
+                name: feed-service
+                port:
+                  number: 80
+          - path: "/friends"
+            pathType: Prefix
+            backend:
+              service:
+                name: friends-service
+                port:
+                  number: 80
+          - path: "/private-chat"
+            pathType: Prefix
+            backend:
+              service:
+                name: private-chat-service
+                port:
+                  number: 80
+          - path: "/user-model"
+            pathType: Prefix
+            backend:
+              service:
+                name: user-model-service
+                port:
+                  number: 80
+          - path: "/user-profiles"
+            pathType: Prefix
+            backend:
+              service:
+                name: user-profile-service
+                port:
+                  number: 80

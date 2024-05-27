@@ -1,7 +1,3 @@
 spring.application.name: user-model-service
-spring:
-  config:
-    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
-
 server:
   port: ${USER_MODEL_PORT:8088}

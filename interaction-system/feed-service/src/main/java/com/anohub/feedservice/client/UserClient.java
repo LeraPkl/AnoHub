@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 public class UserClient {
 
     private final WebClient webClient;
-    private final String USER_MODEL_API_URL = "/user-profiles-app/api/v1/user-profiles/";
+    private final String USER_MODEL_API_URL = "/user-profile-service/api/v1/user-profiles/";
 
     @Retryable
     public Mono<UserDto> getUser(String id) {

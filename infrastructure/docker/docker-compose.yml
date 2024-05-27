@@ -45,7 +45,6 @@ services:
   private_chats_db:
     container_name: ${PRIVATE_CHATS_DB_HOST}
     image: mongo
-    restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${PRIVATE_CHAT_DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${PRIVATE_CHAT_DB_PASSWORD}

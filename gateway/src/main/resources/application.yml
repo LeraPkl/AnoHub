@@ -6,22 +6,6 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-      routes:
-        - id: user_profile_service
-          uri: lb://user-profile-service/api/**
-          predicates:
-            - Path=/user-profiles-app/**
-        - id: feed_service
-          uri: lb://feed-service
-          predicates:
-            - Path=/feed-app/api/**
-        - id: authentication_service
-          uri: lb://authentication-service
-          predicates:
-            - Path=/authentication-app/api/**
-
-  config:
-    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
 
 server:
   port: ${GATEWAY_PORT:8765}

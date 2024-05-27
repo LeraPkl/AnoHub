@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @RestController
-@RequestMapping("/authentication-app/api/v1/public/users")
+@RequestMapping("/api/v1/public/users")
 @RequiredArgsConstructor
 public class UserPublicQueryController {
 

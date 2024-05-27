@@ -1,43 +1,42 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: feed-db
+  name: keycloak-db-service
 spec:
-  ports:
-    - port: 27017
-  clusterIP: None
   selector:
-    app: feed-db
-
+    app: keycloak-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+  type: NodePort
+  
 ---
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: feed-db
+  name: keycloak-db
 spec:
-  serviceName: "feed-db"
+  serviceName: keycloak-db
   selector:
     matchLabels:
-      app: feed-db
+      app: keycloak-db
   template:
     metadata:
       labels:
-        app: feed-db
+        app: keycloak-db
     spec:
       containers:
-        - name: feed-db
-          image: mongo
+        - name: keycloak-db
+          image: postgres:16.1
           ports:
-            - containerPort: 27017
+            - containerPort: 5432
           volumeMounts:
-            - name: feed-data
+            - name: keycloak-data
               mountPath: /data/db
           env:
-            - name: MONGO_REPLICA_SET_NAME
-              value: rs0
-            - name: MONGO_INITDB_DATABASE
-              value: feed
+            - name: POSTGRES_DB
+              value: keycloak
           envFrom:
             - secretRef:
                 name: db-secrets
@@ -45,7 +44,7 @@ spec:
                 name: common-config
   volumeClaimTemplates:
     - metadata:
-        name: feed-data
+        name: keycloak-data
       spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:

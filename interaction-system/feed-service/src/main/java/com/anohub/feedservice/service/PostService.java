@@ -61,7 +61,6 @@ public class PostService {
                         .flatMap(t -> {
                             p.setTopic(t);
                             return Mono.just(p);
-
                         }))
                 .as(transactionalOperator::transactional);
     }
