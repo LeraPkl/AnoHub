@@ -22,8 +22,8 @@ spring:
     url: jdbc:postgresql://${FRIENDS_DB_HOST:localhost}:5432/friends
     driver-class-name: org.postgresql.Driver
 
-  profiles:
-    active: ${ACTIVE PROFILE:kafka}
+  config:
+    import: application-kafka.yml
 
 server:
   port: ${FRIENDS_SERVICE_PORT:8083}
