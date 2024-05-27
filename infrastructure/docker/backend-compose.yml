@@ -1,0 +1,149 @@
+services:
+  config-server:
+    container_name: ${CONFIG_SERVER_HOST}
+    env_file:
+      - .env
+    image: kamomillte/config-server
+    build:
+      context: ../../config-server
+      dockerfile: ./Dockerfile
+    depends_on:
+      - discovery-server
+    ports:
+      - ${CONFIG_SERVER_PORT}:${CONFIG_SERVER_PORT}
+    deploy:
+      resources:
+        limits:
+          memory: 700M
+    networks:
+      - backend
+
+  discovery-server:
+    container_name: ${DISCOVERY_SERVER_HOST}
+    env_file:
+      - .env
+    image: kamomillte/discovery-server
+    build:
+      context: ../../discovery-server
+      dockerfile: ./Dockerfile
+    ports:
+      - ${DISCOVERY_SERVER_PORT}:${DISCOVERY_SERVER_PORT}
+    networks:
+      - backend
+
+  gateway:
+    container_name: ${GATEWAY_HOST}
+    env_file:
+      - .env
+    image: kamomillte/gateway
+    build:
+      context: ../../gateway
+      dockerfile: ./Dockerfile
+    depends_on:
+      - discovery-server
+    ports:
+      - ${GATEWAY_PORT}:${GATEWAY_PORT}
+    networks:
+      - backend
+
+  feed-service:
+    container_name: ${FEED_SERVICE_HOST}
+    env_file:
+      - .env
+    image: kamomillte/feed-service
+    build:
+      context: ../../interaction-system/feed-service
+      dockerfile: ./Dockerfile
+    ports:
+      - ${FEED_SERVICE_PORT}:${FEED_SERVICE_PORT}
+    depends_on:
+      - feed_db
+      - user-model-service
+      - gateway
+      - config-server
+    networks:
+      - backend
+
+  private-chat-service:
+    container_name: ${PRIVATE_CHAT_HOST}
+    env_file:
+      - .env
+    image: kamomillte/private-chat-service
+    build:
+      context: ../../interaction-system/private-chat-service
+      dockerfile: ./Dockerfile
+    ports:
+      - ${PRIVATE_CHAT_PORT}:${PRIVATE_CHAT_PORT}
+    depends_on:
+      - private_chats_db
+      - gateway
+      - config-server
+    networks:
+      - backend
+
+  friends-service:
+    container_name: ${FRIENDS_SERVICE_HOST}
+    env_file:
+      - .env
+    image: kamomillte/friends-service
+    build:
+      context: ../../interaction-system/friends-service
+      dockerfile: ./Dockerfile
+    ports:
+      - ${FRIENDS_SERVICE_PORT}:${FRIENDS_SERVICE_PORT}
+    depends_on:
+      - friends_db
+      - gateway
+      - config-server
+    networks:
+      - backend
+
+  authentication-service:
+    container_name: ${AUTH_HOST}
+    env_file:
+      - .env
+    image: kamomillte/authentication-service
+    build:
+      context: ../../users-management-system/authentication-service
+      dockerfile: ./Dockerfile
+    ports:
+      - ${AUTH_PORT}:${AUTH_PORT}
+    depends_on:
+      - gateway
+      - config-server
+    networks:
+      - backend
+
+  user-profile-service:
+    container_name: ${USER_PROFILE_HOST}
+    env_file:
+      - .env
+    image: kamomillte/user-profile-service
+    build:
+      context: ../../users-management-system/user-profile-service
+      dockerfile: ./Dockerfile
+    ports:
+      - ${USER_PROFILE_PORT}:${USER_PROFILE_PORT}
+    depends_on:
+      - config-server
+    networks:
+      - backend
+
+  user-model-service:
+    container_name: ${USER_MODEL_HOST}
+    env_file:
+      - .env
+    image: kamomillte/user-model-service
+    build:
+      context: ../../users-management-system/user-model-service
+      dockerfile: ./Dockerfile
+    ports:
+      - ${USER_MODEL_PORT}:${USER_MODEL_PORT}
+    depends_on:
+      - config-server
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

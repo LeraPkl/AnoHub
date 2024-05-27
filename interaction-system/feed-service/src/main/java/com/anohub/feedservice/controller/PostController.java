@@ -2,6 +2,7 @@ package com.anohub.feedservice.controller;
 
 import com.anohub.feedservice.model.Post;
 import com.anohub.feedservice.service.PostService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +22,7 @@ public class PostController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Post> createPost(@RequestBody Post post) {
+    public Mono<Post> createPost(@Valid @RequestBody Post post) {
         return postService.createPost(post);
     }
 

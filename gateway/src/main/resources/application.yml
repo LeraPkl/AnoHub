@@ -7,10 +7,10 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: user_model_service
-          uri: lb://user-model-service/api/**
+        - id: user_profile_service
+          uri: lb://user-profile-service/api/**
           predicates:
-            - Path=/user-model-app/**
+            - Path=/user-profiles-app/**
         - id: feed_service
           uri: lb://feed-service
           predicates:
@@ -21,7 +21,7 @@ spring:
             - Path=/authentication-app/api/**
 
   config:
-    import: optional:configserver:http://localhost:8888/config-server
+    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
 
 server:
-  port: 8765
+  port: ${GATEWAY_PORT:8765}

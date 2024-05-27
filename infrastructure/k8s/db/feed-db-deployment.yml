@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: feed-db
+spec:
+  ports:
+    - port: 27017
+  clusterIP: None
+  selector:
+    app: feed-db
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: feed-db
+spec:
+  serviceName: "feed-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: feed-db
+  template:
+    metadata:
+      labels:
+        app: feed-db
+    spec:
+      containers:
+        - name: feed-db
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: feed-data
+              mountPath: /data/db
+          envFrom:
+            - secretRef:
+                name: db-secrets
+            - configMapRef:
+                name: common-config
+  volumeClaimTemplates:
+    - metadata:
+        name: feed-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi

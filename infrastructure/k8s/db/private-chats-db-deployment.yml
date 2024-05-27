@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: private-chats-db
+spec:
+  ports:
+    - port: 27018
+  clusterIP: None
+  selector:
+    app: private-chats-db
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: private-chats-db
+spec:
+  serviceName: "private-chats-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: private-chats-db
+  template:
+    metadata:
+      labels:
+        app: private-chats-db
+    spec:
+      containers:
+        - name: private-chats-db
+          image: mongo
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: private-chats-data
+              mountPath: /data/db
+          envFrom:
+            - secretRef:
+                name: db-secrets
+            - configMapRef:
+                name: common-config
+  volumeClaimTemplates:
+    - metadata:
+        name: private-chats-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi

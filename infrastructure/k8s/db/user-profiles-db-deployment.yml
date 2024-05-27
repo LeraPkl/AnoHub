@@ -1,0 +1,91 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-profiles-db
+spec:
+  ports:
+    - port: 9042
+  clusterIP: None
+  selector:
+    app: user-profiles-db
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: user-profiles-db
+spec:
+  serviceName: "user-profiles-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-profiles-db
+  template:
+    metadata:
+      labels:
+        app: user-profiles-db
+    spec:
+      containers:
+        - name: user-profiles-db
+          image: cassandra:5.0
+          ports:
+            - containerPort: 9042
+          volumeMounts:
+            - name: user-profiles-data
+              mountPath: /var/lib/cassandra
+          envFrom:
+            - secretRef:
+                name: db-secrets
+            - configMapRef:
+                name: common-config
+          env:
+            - name: MAX_HEAP_SIZE
+              value: "256M"
+            - name: HEAP_NEWSIZE
+              value: "128M"
+            - name: CASSANDRA_DC
+              value: "datacenter1"
+          readinessProbe:
+            exec:
+              command:
+                - /bin/bash
+                - -c
+                - cqlsh -e 'describe cluster'
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 5
+  volumeClaimTemplates:
+    - metadata:
+        name: user-profiles-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 10Gi
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-load-keyspace
+spec:
+  template:
+    spec:
+      containers:
+        - name: cassandra-load-keyspace
+          image: cassandra:5.0
+          command: [ "/bin/bash", "-c", "echo loading cassandra keyspace && cqlsh user-profiles-db -f /init.cql" ]
+          volumeMounts:
+            - name: init-cql
+              mountPath: /init.cql
+          envFrom:
+            - configMapRef:
+                name: common-config
+      restartPolicy: OnFailure
+      volumes:
+        - name: init-cql
+          configMap:
+            name: cassandra-init-cql

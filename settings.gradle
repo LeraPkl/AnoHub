@@ -1,11 +1,20 @@
 rootProject.name = 'AnoHub'
 
 include 'discovery-server'
-include 'users-management-system'
-include 'users-management-system:user-model-service'
-include 'users-management-system:authentication-service'
-include 'interaction-system'
-include 'interaction-system:feed-service'
 include 'gateway'
 include 'config-server'
+include 'kafka-service'
+
+include 'users-management-system'
+include 'users-management-system:authentication-service'
+include 'users-management-system:user-profile-service'
+include 'users-management-system:user-model-service'
+
+include 'interaction-system'
+include 'interaction-system:friends-service'
+include 'interaction-system:feed-service'
 include 'interaction-system:private-chat-service'
+include 'interaction-system:notification-service'
+include 'interaction-system:interaction-common'
+
+project(':interaction-system:interaction-common').projectDir = new File(settingsDir, 'interaction-system/interaction-common')

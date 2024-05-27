@@ -13,12 +13,13 @@ public class PostLikeController {
     private final PostLikeService postLikeService;
 
     @PutMapping("/{postId}/like")
-    public Mono<?> toggleLike(@PathVariable String postId, @RequestParam Long userId) {
+    public Mono<?> toggleLike(@PathVariable String postId, @RequestParam String userId) {
         return postLikeService.toggleLike(postId, userId);
     }
 
     @PutMapping("/{postId}/dislike")
-    public Mono<?> toggleDislike(@PathVariable String postId, @RequestParam Long userId) {
+    public Mono<?> toggleDislike(@PathVariable String postId, @RequestParam String userId) {
         return postLikeService.toggleDislike(postId, userId);
     }
 }
+

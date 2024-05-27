@@ -1,9 +1,11 @@
 package com.anohub.privatechatservice.controller;
 
 import com.anohub.privatechatservice.model.Message;
+import com.anohub.privatechatservice.model.SendMessageRequest;
 import com.anohub.privatechatservice.service.MessageService;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,14 +17,17 @@ public class MessageController {
 
     private final MessageService messageService;
 
-    @PostMapping
-    public Mono<Message> sendMessage(@RequestBody Message message) {
+    @MessageMapping("/send")
+    @SendTo("/queue/messages")
+    public Mono<Message> sendMessage(@RequestBody SendMessageRequest message) {
         return messageService.sendMessage(message);
     }
 
     @GetMapping("/chat/{chatId}")
-    public Flux<Message> getAllMessagesByChatId(@PathVariable ObjectId chatId) {
-        return messageService.getAllMessagesByChatId(chatId);
+    public Flux<Message> getMessagesByChatIdPage(@PathVariable String chatId,
+                                                 @RequestParam(value = "page", defaultValue = "0") int page,
+                                                 @RequestParam(value = "size", defaultValue = "50") int size) {
+        return messageService.getMessagesByChatIdPage(chatId, page, size);
     }
 
     @PutMapping("/{id}")

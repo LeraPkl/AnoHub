@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: friends-db
+spec:
+  ports:
+    - port: 5432
+  clusterIP: None
+  selector:
+    app: friends-db
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: friends-db-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: "/mnt/data"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: friends-db-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: friends-db
+spec:
+  serviceName: "friends-db"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: friends-db
+  template:
+    metadata:
+      labels:
+        app: friends-db
+    spec:
+      containers:
+        - name: friends-db
+          image: postgres:16.1
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: friends-db-storage
+              mountPath: /var/lib/postgresql/data
+          envFrom:
+            - secretRef:
+                name: db-secrets
+            - configMapRef:
+                name: common-config
+  volumeClaimTemplates:
+    - metadata:
+        name: friends-db-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 5Gi

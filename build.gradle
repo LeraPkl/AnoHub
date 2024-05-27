@@ -24,13 +24,34 @@ bootJar {
     enabled = false
 }
 
+bootBuildImage {
+    enabled = false
+}
+
 subprojects {
+
     bootJar {
-        enabled = file("${project.projectDir}/src/main").exists()
+        enabled = false
+    }
+
+    jar {
+        enabled = true
+    }
+
+    task pushImage {
+        doLast {
+            if (bootBuildImage.getEnabled()) {
+                exec {
+                    commandLine 'docker', 'tag', "${project.name}:0.0.1-SNAPSHOT", "${System.getenv('DOCKER_USERNAME')}/${project.name}"
+                }
+                exec {
+                    commandLine 'docker', 'push', "${System.getenv('DOCKER_USERNAME')}/${project.name}"
+                }
+            }
+        }
     }
 
     bootBuildImage {
-        enabled = bootJar.enabled
         imageName = "${System.getenv('DOCKER_USERNAME')}/${project.name}"
     }
 }

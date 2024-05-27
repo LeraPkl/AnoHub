@@ -1,0 +1,20 @@
+spring:
+  application.name: user-profile-service
+  config:
+    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
+  profiles:
+    active: ${ACTIVE_PROFILE:kafka}
+  cassandra:
+    keyspace-name: user_profiles
+    local-datacenter: datacenter1
+    username: ${USER_PROFILES_DB_USER}
+    password: ${USER_PROFILES_DB_PASSWORD}
+
+logging:
+  level:
+    org.apache.kafka.clients:
+      NetworkClient: ERROR
+      consumer.internals.ConsumerCoordinator: ERROR
+
+server:
+  port: ${USER_PROFILE_PORT:8087}

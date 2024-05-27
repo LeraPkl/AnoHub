@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: config-server
+  labels:
+    app: config-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: config-server
+  template:
+    metadata:
+      name: config-server
+      labels:
+        app: config-server
+    spec:
+      containers:
+        - name: config-server
+          image: docker.io/kamomillte/config-server
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "650Mi"
+            limits:
+              memory: "700Mi"
+          ports:
+            - containerPort: 8888
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "native,k8s"
+          envFrom:
+            - secretRef:
+                name: s3cr3ts
+            - configMapRef:
+                name: common-config
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: config-server-service
+spec:
+  selector:
+    app: config-server
+  ports:
+    - port: 80
+      targetPort: 8888

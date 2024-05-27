@@ -32,14 +32,11 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker images
-        env:
-          GIT_PRIVATE_KEY: ${{ secrets.GIT_PRIVATE_KEY }}
         run: ./gradlew bootBuildImage
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
 
       - name: Push Docker images
-        run: |
-          for dir in $(find . -type d -name "src" -exec dirname {} \;); do
-            service_name=$(basename "$dir")
-            docker tag $service_name:0.0.1-SNAPSHOT ${{ secrets.DOCKER_USERNAME }}/$service_name:latest
-            docker push ${{ secrets.DOCKER_USERNAME }}/$service_name:latest
-          done
+        run: ./gradlew pushImage
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}

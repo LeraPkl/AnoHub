@@ -2,12 +2,14 @@ spring:
   data:
     mongodb:
       database: private_chats
-      uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@localhost:27018/private_chats?authSource=admin
+      uri: mongodb://${MONGODB_USERNAME}:${MONGODB_PASSWORD}@${PRIVATE_CHATS_DB_HOST:localhost}:27018/private_chats?authSource=admin
   application:
     name: private-chats-service
 
   config:
-    import: optional:configserver:http://localhost:8888/config-server
+    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
+  profiles:
+    active: ${ACTIVE_PROFILE:kafka}
 
 server:
-  port: 8084
+  port: ${PRIVATE_CHAT_PORT:8084}

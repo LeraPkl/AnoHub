@@ -1,5 +1,6 @@
 package com.anohub.authenticationservice.model;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Getter
@@ -11,6 +12,7 @@ public class User {
 
     private String id;
 
+    @Email
     private String email;
 
 }

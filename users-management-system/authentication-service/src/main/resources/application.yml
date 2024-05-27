@@ -1,17 +1,21 @@
 spring:
+  config:
+    import: configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
+  profiles:
+    active: ${ACTIVE_PROFILE:kafka}
   application.name: authentication-service
   datasource:
-    url: jdbc:postgresql://localhost:5433/keycloak
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: jdbc:postgresql://${KEYCLOAK_DB_HOST:localhost}:5433/keycloak
+    username: ${KEYCLOAK_DB_USER}
+    password: ${KEYCLOAK_DB_PASSWORD}
   security.oauth2:
     resourceserver:
       jwt:
-        jwk-set-uri: http://localhost:9080/realms/ano-hub/protocol/openid-connect/certs
+        jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
     client:
       provider:
         keycloak:
-          issuer-uri: http://localhost:9080/realms/ano-hub
+          issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
       registration:
         keycloak-client:
           provider: keycloak
@@ -19,10 +23,12 @@ spring:
           client-secret: ${CLIENT_SECRET}
           authorization-grant-type: authorization_code
           scope: openid
-          redirect-uri: http://localhost:${server.port}/login/oauth2/code/keycloak-client
+          redirect-uri: http://${keycloak.host}:${server.port}/login/oauth2/code/keycloak-client
 
 keycloak:
-  server-url: http://localhost:9080
+  host: ${KEYCLOAK_HOST:localhost}
+  port: ${KEYCLOAK_PORT:8080}
+  server-url: http://${keycloak.host}:${keycloak.port}
   realm: ano-hub
 jwt:
   auth:
@@ -30,6 +36,10 @@ jwt:
       resource-id: keycloak-client
       principle-attribute: preferred_username
 
+logging:
+  level:
+    org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: ERROR
+
 server:
-  port: 8085
+  port: ${AUTH_PORT:8085}
 

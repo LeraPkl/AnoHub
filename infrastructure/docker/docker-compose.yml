@@ -1,0 +1,126 @@
+services:
+  friends_db:
+    container_name: ${FRIENDS_DB_HOST}
+    image: postgres:16.1
+    environment:
+      POSTGRES_USER: ${FRIENDS_DB_USER}
+      POSTGRES_PASSWORD: ${FRIENDS_DB_PASSWORD}
+      POSTGRES_DB: friends
+    ports:
+      - ${FRIENDS_DB_PORT}:${FRIENDS_DB_PORT}
+    volumes:
+      - friends_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  feed_db:
+    container_name: ${FEED_DB_HOST}
+    image: mongo
+    restart: always
+    command: mongod --replSet rs0
+    environment:
+      MONGO_REPLICA_SET_NAME: rs0
+      MONGO_INITDB_DATABASE: feed
+    ports:
+      - ${FEED_DB_PORT}:${FEED_DB_PORT}
+    volumes:
+      - ../db/mongodb/feed:/docker-entrypoint-initdb.d
+      - feed_data:/data/db
+    networks:
+      - backend
+
+  notification_db:
+    container_name: ${NOTIFICATION_DB_HOST}
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: notification
+    ports:
+      - ${NOTIFICATION_DB_PORT}:${NOTIFICATION_DB_PORT}
+    volumes:
+      - notification_data:/data/db
+    networks:
+      - backend
+
+  private_chats_db:
+    container_name: ${PRIVATE_CHATS_DB_HOST}
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${PRIVATE_CHAT_DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${PRIVATE_CHAT_DB_PASSWORD}
+      MONGO_INITDB_DATABASE: private_chats
+      MONGO_REPLICA_SET_NAME: rs0
+    ports:
+      - ${PRIVATE_CHAT_DB_PORT}:${PRIVATE_CHAT_DB_PORT}
+    volumes:
+      - private_chats:/data/db
+    networks:
+      - backend
+
+  user_profiles_db:
+    container_name: ${USER_PROFILES_DB_HOST}
+    image: cassandra:5.0
+    environment:
+      CASSANDRA_CLUSTER_NAME: abo_hub
+      CASSANDRA_USER: ${USER_PROFILES_DB_USER}
+      CASSANDRA_PASSWORD: ${USER_PROFILES_DB_PASSWORD}
+      MAX_HEAP_SIZE: 256M
+      HEAP_NEWSIZE: 128M
+      CASSANDRA_DC: datacenter1
+    ports:
+      - ${USER_PROFILES_DB_PORT}:${USER_PROFILES_DB_PORT}
+    volumes:
+      - user_profiles_data:/var/lib/cassandra
+    healthcheck:
+      test: [ "CMD-SHELL", "cqlsh -e 'describe cluster'" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - backend
+
+  cassandra-load-keyspace:
+    container_name: ${KEYSPACE_DB_HOST}
+    image: cassandra:5.0
+    environment:
+      CASSANDRA_CLUSTER_NAME: ${KEYSPACE_DB_CLUSTER}
+      CASSANDRA_USER: ${KEYSPACE_DB_USER}
+      CASSANDRA_PASSWORD: ${KEYSPACE_DB_PASSWORD}
+    depends_on:
+      user_profiles_db:
+        condition: service_healthy
+    volumes:
+      - ../db/cassandra/init.cql:/init.cql
+    command: /bin/bash -c "echo loading cassandra keyspace && cqlsh user_profiles_db -f /init.cql"
+    networks:
+      - backend
+
+  redis:
+    image: redis:7.0
+    container_name: ${REDIS_HOST}
+    restart: always
+    depends_on:
+      - redis_insight
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+
+  redis_insight:
+    image: redislabs/redisinsight:1.9.0
+    container_name: ${REDIS_INSIGHT_HOST}
+    restart: always
+    ports:
+      - ${REDIS_INSIGHT_PORT}:${REDIS_INSIGHT_PORT}
+
+networks:
+  backend:
+    name: backend
+    external: true
+
+volumes:
+  feed_data:
+  friends_data:
+  private_chats:
+  user_profiles_data:
+  notification_data:
+

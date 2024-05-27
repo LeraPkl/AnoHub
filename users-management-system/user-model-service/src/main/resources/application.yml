@@ -1,29 +1,7 @@
+spring.application.name: user-model-service
 spring:
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5432/users
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
-  application.name: user-model-service
-
-  flyway:
-    baseline-on-migrate: true
-    enabled: true
-    locations: classpath:db/migration
-    user: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    url: jdbc:postgresql://localhost:5432/users
-    driver-class-name: org.postgresql.Driver
-
   config:
-    import: optional:configserver:http://localhost:8888/config-server
+    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost:8888}/config-server
 
 server:
-  port: 8083
+  port: ${USER_MODEL_PORT:8088}
