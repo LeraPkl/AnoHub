@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0'
+    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
     implementation project(':interaction-system:interaction-common')
     implementation project(':kafka-service')

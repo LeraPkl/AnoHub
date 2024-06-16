@@ -1,0 +1,45 @@
+spring:
+  application.name: authentication-service
+  config:
+    import: application-kafka.yml
+  datasource:
+    url: jdbc:postgresql://${KEYCLOAK_DB_HOST}:${KEYCLOAK_DB_PORT_EXP}/keycloak
+    username: ${KEYCLOAK_DB_USER}
+    password: ${KEYCLOAK_DB_PASSWORD}
+  security.oauth2:
+    resourceserver:
+      jwt:
+        jwk-set-uri: ${spring.security.oauth2.client.provider.keycloak.issuer-uri}/protocol/openid-connect/certs
+    client:
+      provider:
+        keycloak:
+          issuer-uri: ${keycloak.server-url}/realms/${keycloak.realm}
+      registration:
+        keycloak-client:
+          provider: keycloak
+          client-id: keycloak-client
+          client-secret: ${CLIENT_SECRET}
+          authorization-grant-type: authorization_code
+          scope: openid
+          redirect-uri: http://${keycloak.host}:${server.port}/login/oauth2/code/keycloak-client
+
+keycloak:
+  host: ${KEYCLOAK_HOST}
+  port: ${KEYCLOAK_PORT}
+  server-url: http://${keycloak.host}:${keycloak.port}
+  realm: ano-hub
+jwt:
+  auth:
+    converter:
+      resource-id: keycloak-client
+      principle-attribute: preferred_username
+
+logging:
+  level:
+    org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: ERROR
+
+gateway.url: http://${GATEWAY_HOST}:${GATEWAY_PORT}
+
+server:
+  port: ${AUTH_PORT}
+

@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27019/notification?authSource=admin
+  config:
+    import: application-kafka.yml
+  application.name: notification-service
+
+server:
+  port: 8086

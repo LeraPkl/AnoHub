@@ -1,14 +1,6 @@
 spring:
-  data:
-    mongodb:
-      database: feed
-      uri: mongodb://${FEED_DB_HOST:localhost}:27017/feed?authSource=admin&retryWrites=false
-      replica-set-name: rs0
   application:
     name: feed-service
-
-  config:
-    import: application-kafka.yml
-server:
-  port: ${FEED_SERVICE_PORT:8081}
+  profiles:
+    active: ${ACTIVE_PROFILE}
 

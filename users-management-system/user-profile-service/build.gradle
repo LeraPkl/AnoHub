@@ -37,6 +37,7 @@ dependencies {
     implementation 'org.apache.kafka:kafka-streams'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
     implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
+    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
 
     implementation project(':users-management-system:user-model-service')
     implementation project(':kafka-service')

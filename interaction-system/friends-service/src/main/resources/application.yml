@@ -1,29 +1,4 @@
 spring:
-  r2dbc:
-    url: r2dbc:postgresql://${FRIENDS_DB_HOST:localhost}:5432/friends
-    username: ${FRIENDS_DB_USER}
-    password: ${FRIENDS_DB_PASSWORD}
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
   application.name: friends-service
-
-  flyway:
-    baseline-on-migrate: true
-    enabled: true
-    locations: classpath:db/migration
-    user: ${FRIENDS_DB_USER}
-    password: ${FRIENDS_DB_PASSWORD}
-    url: jdbc:postgresql://${FRIENDS_DB_HOST:localhost}:5432/friends
-    driver-class-name: org.postgresql.Driver
-
-  config:
-    import: application-kafka.yml
-
-server:
-  port: ${FRIENDS_SERVICE_PORT:8083}
+  profiles:
+    active: ${ACTIVE_PROFILE:dev}
